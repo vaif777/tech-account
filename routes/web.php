@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FloorController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\TelecommunicationCabinetController;
 use Illuminate\Support\Facades\Route;
@@ -21,4 +23,6 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
 Route::resource('/building', BuildingController::class);
+Route::resource('/floor', FloorController::class);
+Route::resource('/room', RoomController::class);
 

@@ -74,7 +74,14 @@ class BuildingController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $building = Building::query()->find($id);
+        $foolrs = $building->floors;
+        //dd(implode(', ', $foolrs->find(1)->rooms->pluck('name')->toArray()));
+
+        return view('building.show', [
+            'building' => $building,
+            'foolrs' => $foolrs,
+        ]);
     }
 
     /**
@@ -82,7 +89,11 @@ class BuildingController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $building = Building::query()->find($id);
+
+        return view('building.edit', [
+            'building' => $building,
+        ]);
     }
 
     /**
@@ -90,7 +101,18 @@ class BuildingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $building = Building::query()->find($id);
+
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+        ]);
+
+        $data = $request->all();
+        $building->update($data);
+
+        return redirect()->route('building.edit', ['building' => $building->id])->with('success', 'Здание отредактирован');
+
     }
 
     /**
@@ -98,6 +120,11 @@ class BuildingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $building = Building::query()->find($id);
+       
+        if($building->floors->count()) return redirect()->route('building.index')->with('error', 'Здание нельзя удалить есть связи.');
+        $building->delete();
+
+        return redirect()->route('building.index')->with('success', 'Здание удален');
     }
 }

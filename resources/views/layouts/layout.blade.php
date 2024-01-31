@@ -321,6 +321,13 @@
           </div>
           @endif
         </div>
+        <div class="col-12">
+          @if (session()->has('error'))
+          <div class="alert alert-danger">
+            {{ session('error') }}
+          </div>
+          @endif
+        </div>
       </div>
     </div>
     <!-- Content Wrapper. Contains page content -->

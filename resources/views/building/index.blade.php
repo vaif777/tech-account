@@ -38,15 +38,15 @@
                     <tbody>
                     @foreach($buildings as $building)
                       <tr>
-                        <td>{{ $building->name }}</td>
+                        <td><a href="{{ route('building.show', ['building' => $building->id]) }}">{{ $building->name }}</a></td>
                         <td>{{ $building->address }}</td>
                         <td>
 
-                          <a href="" class="btn btn-info btn-sm float-left mr-1">
+                          <a href="{{ route('building.edit', ['building' => $building->id]) }}" class="btn btn-info btn-sm float-left mr-1">
                             <i class="fas fa-pencil-alt"></i>
                           </a>
 
-                          <form action="" method="post" class="float-left">
+                          <form action="{{ route('building.destroy', ['building' => $building->id]) }}" method="post" class="float-left">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm"
