@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\TelecommunicationCabinetController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
+Route::resource('/building', BuildingController::class);
+
