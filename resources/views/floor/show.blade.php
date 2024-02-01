@@ -108,8 +108,7 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
-
-      <a href="{{ route('floor.index', ['id' => $building->id]) }}" class="btn btn-block btn-secondary col-3">Перийти в раздел с этажами</a>
+      <button type="button" class="btn btn-block btn-secondary col-3">Перийти в раздел с этажами</button>
     </div><!-- /.container-fluid -->
     <div class="col-12" id="accordion">
       @foreach($foolrs as $foolr)

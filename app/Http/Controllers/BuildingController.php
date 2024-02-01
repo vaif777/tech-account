@@ -75,8 +75,7 @@ class BuildingController extends Controller
     public function show(string $id)
     {
         $building = Building::query()->find($id);
-        $foolrs = $building->floors;
-        //dd(implode(', ', $foolrs->find(1)->rooms->pluck('name')->toArray()));
+        $foolrs = $building->floors()->orderBy('name')->get();
 
         return view('building.show', [
             'building' => $building,
@@ -89,6 +88,7 @@ class BuildingController extends Controller
      */
     public function edit(string $id)
     {
+        
         $building = Building::query()->find($id);
 
         return view('building.edit', [
