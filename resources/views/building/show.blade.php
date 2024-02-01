@@ -109,7 +109,7 @@
       </div>
       <!-- /.row -->
 
-      <a href="{{ route('floor.index', ['id' => $building->id]) }}" class="btn btn-block btn-secondary col-3">Перийти в раздел с этажами</a>
+      <a href="{{ route('floor.index', ['building' => $building->id]) }}" class="btn btn-block btn-secondary col-3">Перийти в раздел с этажами</a>
     </div><!-- /.container-fluid -->
     <div class="col-12" id="accordion">
       @foreach($foolrs as $foolr)

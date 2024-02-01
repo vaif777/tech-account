@@ -24,6 +24,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
 Route::resource('/building', BuildingController::class);
 Route::resource('/floor', FloorController::class, ['except' => ['index']]);
-Route::get('/floor/building/{id}', [FloorController::class, 'index'])->name('floor.index');
+Route::get('/floor/{building}/index', [FloorController::class, 'index'])->name('floor.index');
 Route::resource('/room', RoomController::class);
 

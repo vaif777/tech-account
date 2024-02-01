@@ -42,6 +42,7 @@ class FloorController extends Controller
         return view('floor.index', [
             'floors' => $floors,
             'buildings' => $buildings,
+            'building_id' => $id
         ]);
     }
 
