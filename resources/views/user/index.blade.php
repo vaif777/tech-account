@@ -4,7 +4,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 id=test class="m-0">Здания</h1>
+        <h1 id=test class="m-0">Пользователи</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -15,8 +15,8 @@
   <div class="container-fluid">
     <!-- Small boxes (Stat box) -->
     <div>
-      <!-- SELECT2 EXAMPLE card card-default collapsed-card-->
-      <div class="card card-default">
+      <!-- SELECT2 EXAMPLE -->
+      <div class="card card-default collapsed-card">
         <div class="card-header">
           <h3 class="card-title">Фильтер</h3>
 
@@ -34,21 +34,6 @@
                 <label>Здание</label>
                 <select class="form-control select2" id="buildings" style="width: 100%;">
                   
-                  @if ($building_id == 'all')
-                  <option value="all" selected="selected">Выберите здание</option>
-                  @else
-                  <option value="all">Выберите здание</option>
-                  @endif
-
-                  @foreach($buildings as $building)
-
-                  @if ($building_id == $building->id)
-                  <option value="{{ $building->id }}" selected="selected">{{ $building->name }}</option>
-                  @else
-                  <option value="{{ $building->id }}">{{ $building->name }}</option>
-                  @endif
-
-                  @endforeach
                 </select>
               </div>
             </div>
@@ -80,28 +65,25 @@
             <div class="card-body">
               <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавить</a>
               <div class="table-responsive">
-                @if (count($floors))
+                @if (count($users))
                 <table id="floorTbl" class="table table-bordered table-hover text-nowrap">
                   <thead>
                     <tr>
-                      <th>Название этажа</th>
-                      <th>Здание</th>
+                      <th>ФИО</th>
                       <th>дествие</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($floors as $floor)
+                    @foreach($users as $user)
                     <tr>
-                      <td><a href="{{ route('floor.show', ['floor' => $floor->id]) }}">{{ $floor->name }}</a></td>
-                      <td><a href="{{ route('building.show', ['building' => $floor->building_id]) }}">{{
-                          $floor->building->name }}</a></td>
+                      <td><a href="{{ route('user.show', ['user' => $user->id]) }}">{{ $user->name }}</a></td>
                       <td>
 
-                        <a href="" class="btn btn-info btn-sm float-left mr-1">
+                        <a href="{{ route('user.edit', ['user' => $user->id]) }}" class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
 
-                        <form action="" method="post" class="float-left">
+                        <form action="{{ route('user.destroy', ['user' => $user->id]) }}" method="post" class="float-left">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="btn btn-danger btn-sm"

@@ -176,7 +176,6 @@
                 </li>
               </ul>
           </ul>
-          </li>
 
           <li class="nav-item">
             <a href="#" class="nav-link">
@@ -303,6 +302,15 @@
               </li>
             </ul>
           </li>
+
+          <li class="nav-item">
+            <a href="{{ route('user.index') }}" class="nav-link">
+              <p>
+                Пользователи
+              </p>
+            </a>
+          </li>
+
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
