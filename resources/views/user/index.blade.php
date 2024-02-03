@@ -33,7 +33,7 @@
               <div class="form-group">
                 <label>Здание</label>
                 <select class="form-control select2" id="buildings" style="width: 100%;">
-                  
+
                 </select>
               </div>
             </div>
@@ -64,6 +64,7 @@
           <div class="row">
             <div class="card-body">
               <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+              <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавление через почту</a>
               <div class="table-responsive">
                 @if (count($users))
                 <table id="floorTbl" class="table table-bordered table-hover text-nowrap">
@@ -79,11 +80,18 @@
                       <td><a href="{{ route('user.show', ['user' => $user->id]) }}">{{ $user->name }}</a></td>
                       <td>
 
-                        <a href="{{ route('user.edit', ['user' => $user->id]) }}" class="btn btn-info btn-sm float-left mr-1">
+                        <a href="{{ route('user.edit', ['user' => $user->id]) }}"
+                          class="btn btn-secondary btn-sm float-left mr-1">
+                          Подтвердите
+                        </a>
+
+                        <a href="{{ route('user.edit', ['user' => $user->id]) }}"
+                          class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
 
-                        <form action="{{ route('user.destroy', ['user' => $user->id]) }}" method="post" class="float-left">
+                        <form action="{{ route('user.destroy', ['user' => $user->id]) }}" method="post"
+                          class="float-left">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="btn btn-danger btn-sm"
@@ -91,6 +99,7 @@
                             <i class="fas fa-trash-alt"></i>
                           </button>
                         </form>
+
                       </td>
                     </tr>
                     @endforeach

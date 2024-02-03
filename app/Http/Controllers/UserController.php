@@ -10,7 +10,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
         $users = User::query()->select()->get();
@@ -18,6 +18,7 @@ class UserController extends Controller
         return view('user.index', [
             'users' => $users,
         ]);
+
     }
 
     /**

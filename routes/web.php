@@ -19,9 +19,9 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'verified']], function(){
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/floor/{building}/index', [FloorController::class, 'index'])->name('floor.index'); 

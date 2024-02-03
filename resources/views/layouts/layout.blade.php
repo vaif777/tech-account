@@ -41,7 +41,14 @@
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="{{ route('home') }}" class="nav-link">Главная</a>
+          <a href="{{ route('home') }}" class="btn btn-link">Главная</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <form action="{{ route('logout') }}" method="post" class="float-left">
+            @csrf
+            <button type="submit" class="btn btn-link">
+            Выход
+            </button>
         </li>
       </ul>
 
@@ -307,6 +314,14 @@
             <a href="{{ route('user.index') }}" class="nav-link">
               <p>
                 Пользователи
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('user.index') }}" class="nav-link">
+              <p>
+                Настройки
               </p>
             </a>
           </li>
