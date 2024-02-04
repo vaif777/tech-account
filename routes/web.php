@@ -3,8 +3,9 @@
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TelecommunicationCabinetController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
@@ -25,6 +26,7 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/floor/{building}/index', [FloorController::class, 'index'])->name('floor.index'); 
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
 
     Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
     Route::resource('/building', BuildingController::class);

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>Технический учет</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet"
@@ -119,7 +119,7 @@
             <!-- <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image"> -->
           </div>
           <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
+            <a href="#" class="d-block">{{ Auth()->user()->name }}</a>
           </div>
         </div>
 
@@ -319,7 +319,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="{{ route('user.index') }}" class="nav-link">
+            <a href="{{ route('settings') }}" class="nav-link">
               <p>
                 Настройки
               </p>
@@ -337,7 +337,7 @@
     <!-- Content Header (Page header) -->
     <div class="container mt-2">
       <div class="row">
-        <div class="col-12">
+        <div id='success' class="col-12">
           @if (session()->has('success'))
           <div class="alert alert-success">
             {{ session('success') }}

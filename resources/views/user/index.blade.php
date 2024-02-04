@@ -71,6 +71,7 @@
                   <thead>
                     <tr>
                       <th>ФИО</th>
+                      <th>Email</th>
                       <th>дествие</th>
                     </tr>
                   </thead>
@@ -78,12 +79,12 @@
                     @foreach($users as $user)
                     <tr>
                       <td><a href="{{ route('user.show', ['user' => $user->id]) }}">{{ $user->name }}</a></td>
+                      <td>{{ $user->email }}</td>
                       <td>
 
-                        <a href="{{ route('user.edit', ['user' => $user->id]) }}"
-                          class="btn btn-secondary btn-sm float-left mr-1">
+                        <button id="confirmation{{$user->id}}" type="button" class="btn btn-secondary btn-sm float-left mr-1">
                           Подтвердите
-                        </a>
+                        </button>
 
                         <a href="{{ route('user.edit', ['user' => $user->id]) }}"
                           class="btn btn-info btn-sm float-left mr-1">
@@ -139,73 +140,34 @@
 </script>
 <script>
 
-  let selectBuildings = document.getElementById('buildings');
+  let buttonsConfirmation = document.querySelectorAll("button.btn.btn-secondary.btn-sm.float-left.mr-1");
 
-  $(document).ready(function () {
-    $(selectBuildings).on('change', (function () {
+  for (let i = 0; i <= buttonsConfirmation.length; i++) {
 
-      $.ajax({
-        method: "GET",
-        url: "{{ route('floor.index', ['building' => 'all']) }}",
-        data: { building_id: selectBuildings.value },
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      })
-        .done(function (floors) {
+    $(document).ready(function () {
+      $(buttonsConfirmation[i]).on('click', (function () {
 
-          let floorTbl = document.getElementById('floorTbl');
-          floorTbl.removeChild(floorTbl.getElementsByTagName("tbody")[0]);
-          let floorBody = document.createElement("tbody");
-
-          for (let i = 0; i < floors.length; i++) {
-
-            let row = document.createElement("tr");
-
-            let url = "{{ asset('floor') }}";
-            let cell = document.createElement("td");
-            cell.insertAdjacentHTML('beforeend', `<a href="${url}/${floors[i]['id']}">${floors[i]['name']}</a>`);
-            row.appendChild(cell);
-
-            url = "{{ asset('building') }}";
-            cell = document.createElement("td");
-            cell.insertAdjacentHTML('beforeend', `<a href="${url}/${floors[i]['building_id']}">${floors[i]['building_name']}</a>`);
-            row.appendChild(cell);
-
-            url = "{{ asset('floor') }}";
-            cell = document.createElement("td");
-            cell.insertAdjacentHTML(
-              'beforeend',
-              `<a href="${url}/${floors[i]['id']}/edit" class="btn btn-info btn-sm float-left mr-1">
-                <i class="fas fa-pencil-alt"></i>
-            </a>
-
-            <form action="" method="post" class="float-left">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger btn-sm"
-                onclick="return confirm('Подтвердите удаление')">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </form>`
-            );
-            row.appendChild(cell);
-
-            floorBody.appendChild(row);
+        $.ajax({
+          method: "GET",
+          url: "{{ route('user.index') }}",
+          data: { building_id: true },
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
+        })
+          .done(function (floors) {
+            
+            let divSuccess = document.getElementById('success');
+            divSuccess.insertAdjacentHTML('beforeend','<div class="alert alert-success">ok</div>');
+            buttonsConfirmation[i].remove();
 
-          floorTbl.appendChild(floorBody);
+          });
+      }))
 
-          let url = location.pathname;
-          urlArr = url.split('/')
-          index = urlArr.indexOf('index');
-          urlArr[index - 1] = selectBuildings.value;
-          url = urlArr.join('/');
-          history.pushState({}, '', url);
+    })
 
-        });
-    }))
-
-  })
+  }
+  
+  
 </script>
 @endsection
