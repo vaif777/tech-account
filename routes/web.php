@@ -24,6 +24,7 @@ Auth::routes(['verify' => true]);
 
 Route::group(['middleware' => ['auth', 'verified']], function(){
 
+    Route::get('/', [HomeController::class, 'index']);
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/floor/{building}/index', [FloorController::class, 'index'])->name('floor.index'); 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');

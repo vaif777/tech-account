@@ -2,16 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Settings;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //$buildings = Building::query()->select()->get();
+        $settings = Settings::query()->find(1);
+
+        if ($request->ajax()) {
+            
+            $settings->update([
+                $request->name => $request->result,
+            ]);
+
+            return [ $request->name => $request->result];
+        }
 
         return view('settings.index', [
-            //'floors' => $floors,
+            'settings' => $settings,
         ]);
 
        
