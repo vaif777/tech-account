@@ -63,7 +63,7 @@
           <!-- Main row -->
           <div class="row">
             <div class="card-body">
-              <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+              <a href="{{ route('user.create') }}" class="btn btn-success mb-3">+ Добавить</a>
               <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавление через почту</a>
               <div class="table-responsive">
                 @if (count($users))
@@ -81,10 +81,11 @@
                       <td><a href="{{ route('user.show', ['user' => $user->id]) }}">{{ $user->name }}</a></td>
                       <td>{{ $user->email }}</td>
                       <td>
-
-                        <button id="confirmation{{$user->id}}" type="button" class="btn btn-secondary btn-sm float-left mr-1">
+                      @if ($confirmEachNewRegisteredUser and !$user->activated)
+                        <button id="confirmation{{$user->id}}" type="button" name="activated" value="1" data-user="{{ $user->name }}" data-id="{{ $user->id }}" class="btn btn-secondary btn-sm float-left mr-1">
                           Подтвердите
                         </button>
+                      @endif
 
                         <a href="{{ route('user.edit', ['user' => $user->id]) }}"
                           class="btn btn-info btn-sm float-left mr-1">
@@ -150,7 +151,11 @@
         $.ajax({
           method: "GET",
           url: "{{ route('user.index') }}",
-          data: { building_id: true },
+          data: { 
+            name: buttonsConfirmation[i].name,
+            user_id: buttonsConfirmation[i].dataset.id,
+            result: buttonsConfirmation[i].value
+          },
           headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
@@ -158,7 +163,7 @@
           .done(function (floors) {
             
             let divSuccess = document.getElementById('success');
-            divSuccess.insertAdjacentHTML('beforeend','<div class="alert alert-success">ok</div>');
+            divSuccess.insertAdjacentHTML('beforeend',`<div class="alert alert-success">Пользователь ${buttonsConfirmation[i].dataset.user} потвержден.</div>`);
             buttonsConfirmation[i].remove();
 
           });

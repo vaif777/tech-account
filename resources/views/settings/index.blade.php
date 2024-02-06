@@ -77,7 +77,7 @@ for (let i = 0; i < inputSettings.length; i++) {
       })
         .done(function (floors) {
           
-          console.log(floors);
+          //console.log(floors);
           
         });
     }))

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,20 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        $users = User::query()->select()->get();
+        $users = User::query()->select()->where('id', '<>', Auth()->user()->id)->orderBy('activated')->get();
+        $confirmEachNewRegisteredUser = Settings::query()->find(1)->value('confirm_each_new_registered_user');
+
+        if ($request->ajax()) {
+            
+            User::query()->find($request->user_id)->update([
+                $request->name => $request->result,
+            ]);
+
+        }
 
         return view('user.index', [
             'users' => $users,
+            'confirmEachNewRegisteredUser' => $confirmEachNewRegisteredUser,
         ]);
 
     }
@@ -27,7 +38,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $confirmEachNewRegisteredUser = Settings::query()->find(1)->value('confirm_each_new_registered_user');
+
+        return view('user.create', [
+            'confirmEachNewRegisteredUser' => $confirmEachNewRegisteredUser,
+        ]);
     }
 
     /**

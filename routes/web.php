@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivatedController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BuildingController;
@@ -23,6 +24,12 @@ use App\Http\Controllers\HomeController;
 Auth::routes(['verify' => true]);
 
 Route::group(['middleware' => ['auth', 'verified']], function(){
+
+    Route::get('/activated', [ActivatedController::class, 'index'])->name('activated');
+    
+});
+
+Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser']], function(){
 
     Route::get('/', [HomeController::class, 'index']);
     Route::get('/home', [HomeController::class, 'index'])->name('home');
