@@ -63,8 +63,10 @@
           <!-- Main row -->
           <div class="row">
             <div class="card-body">
+              @if (Auth()->user()->permissions->add)
               <a href="{{ route('user.create') }}" class="btn btn-success mb-3">+ Добавить</a>
               <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавление через почту</a>
+              @endif
               <div class="table-responsive">
                 @if (count($users))
                 <table id="floorTbl" class="table table-bordered table-hover text-nowrap">
@@ -81,17 +83,20 @@
                       <td><a href="{{ route('user.show', ['user' => $user->id]) }}">{{ $user->name }}</a></td>
                       <td>{{ $user->email }}</td>
                       <td>
-                      @if ($confirmEachNewRegisteredUser and !$user->activated)
+                      @if ($confirmEachNewRegisteredUser and !$user->activated and Auth()->user()->permissions->activated)
                         <button id="confirmation{{$user->id}}" type="button" name="activated" value="1" data-user="{{ $user->name }}" data-id="{{ $user->id }}" class="btn btn-secondary btn-sm float-left mr-1">
                           Подтвердите
                         </button>
                       @endif
 
+                      @if (Auth()->user()->permissions->edit)
                         <a href="{{ route('user.edit', ['user' => $user->id]) }}"
                           class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
+                        @endif
 
+                        @if (Auth()->user()->permissions->delite)
                         <form action="{{ route('user.destroy', ['user' => $user->id]) }}" method="post"
                           class="float-left">
                           @csrf
@@ -101,6 +106,7 @@
                             <i class="fas fa-trash-alt"></i>
                           </button>
                         </form>
+                        @endif
 
                       </td>
                     </tr>

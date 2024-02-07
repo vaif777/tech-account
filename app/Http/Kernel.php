@@ -66,5 +66,10 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'openRegistration' => \App\Http\Middleware\OpenRegistration::class,
         'confirmEachNewRegisteredUser' => \App\Http\Middleware\ConfirmEachNewRegisteredUser::class,
+        'visibleSections' => \App\Http\Middleware\VisibleSections::class, 
+        'add' => \App\Http\Middleware\Add::class, 
+        'edit' => \App\Http\Middleware\Edit::class, 
+        'delite' => \App\Http\Middleware\Delite::class,
+        
     ];
 }

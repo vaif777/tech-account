@@ -27,7 +27,6 @@
         <!-- /.col -->
       </div>
       <!-- info row -->
-
       
       <div class="card-body">
       <h5>Открытая регистрация:</h5>

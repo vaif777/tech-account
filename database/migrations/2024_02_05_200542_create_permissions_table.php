@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('add')->default(false);
             $table->boolean('edit')->default(false);
             $table->boolean('delite')->default(false);
+            $table->boolean('activated')->default(false);
             $table->boolean('SCS')->default(false);
             $table->boolean('telephony')->default(false);
             $table->boolean('storage')->default(false);

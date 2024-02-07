@@ -49,7 +49,7 @@
           <form action="{{ route('logout') }}" method="post" class="float-left">
             @csrf
             <button type="submit" class="btn btn-link">
-            Выход
+              Выход
             </button>
         </li>
       </ul>
@@ -142,7 +142,8 @@
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-            <li class="nav-item">
+              @if (Auth()->user()->permissions->SCS)
+              <li class="nav-item">
               <a href="#" class="nav-link">
                 <p>
                   СКС
@@ -184,8 +185,11 @@
                   </a>
                 </li>
               </ul>
-          </ul>
+            </ul>
+          </li>
+          @endif
 
+          @if (Auth()->user()->permissions->telephony)
           <li class="nav-item">
             <a href="#" class="nav-link">
               <p>
@@ -230,7 +234,9 @@
             </ul>
             </ul>
           </li>
+          @endif
 
+          @if (Auth()->user()->permissions->storage)
           <li class="nav-item">
             <a href="#" class="nav-link">
               <p>
@@ -275,8 +281,9 @@
             </ul>
             </ul>
           </li>
+          @endif
 
-
+          @if (Auth()->user()->permissions->common_elements)
           <li class="nav-item">
             <a href="#" class="nav-link">
               <p>
@@ -311,7 +318,9 @@
               </li>
             </ul>
           </li>
+          @endif
 
+          @if (Auth()->user()->permissions->user)
           <li class="nav-item">
             <a href="{{ route('user.index') }}" class="nav-link">
               <p>
@@ -319,7 +328,9 @@
               </p>
             </a>
           </li>
+          @endif
 
+          @if (Auth()->user()->permissions->settings)
           <li class="nav-item">
             <a href="{{ route('settings') }}" class="nav-link">
               <p>
@@ -327,6 +338,7 @@
               </p>
             </a>
           </li>
+          @endif
 
           </ul>
         </nav>

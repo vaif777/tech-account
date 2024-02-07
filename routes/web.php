@@ -29,17 +29,23 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
     
 });
 
-Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser']], function(){
+Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser', 'visibleSections']], function(){
 
     Route::get('/', [HomeController::class, 'index']);
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/floor/{building}/index', [FloorController::class, 'index'])->name('floor.index'); 
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/home', [HomeController::class, 'index'])->name('home'); 
 
-    Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
-    Route::resource('/building', BuildingController::class);
-    Route::resource('/floor', FloorController::class, ['except' => ['index']]);
-    Route::resource('/room', RoomController::class);
+    Route::group(['prefix' => 'SCS'], function(){
+        Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
+    });
+
+    Route::group(['prefix' => 'common-elements'], function(){
+        Route::resource('/building', BuildingController::class);
+        Route::resource('/floor', FloorController::class, ['except' => ['index']]);
+        Route::get('/floor/{building}/index', [FloorController::class, 'index'])->name('floor.index');
+        Route::resource('/room', RoomController::class);
+    });
+
     Route::resource('/user', UserController::class);
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     
 });
