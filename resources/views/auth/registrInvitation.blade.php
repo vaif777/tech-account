@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cброс пароля</title>
+    <title>Регистрация</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -31,21 +31,24 @@
 
         <div class="card">
             <div class="card-body register-card-body">
-                <p class="login-box-msg">Cброс пароля</p>
+                <p class="login-box-msg">Регистрация по приглашению</p>
 
-                <form action="{{ route('password.update') }}" method="post" novalidate>
+                <form action="{{ route('registr_invitation.store') }}" method="post" novalidate>
                     @csrf
             
-                    <input type="hidden" name="token" value="{{ $token }}">
+                    <input type="hidden" name="id" value="{{ $id }}">
+                    <input type="hidden" name="email" value="{{ $mail }}">
 
                     <div class="input-group mb-3">
-                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
+                            name="name" value="{{ old('name') }}" placeholder="ФИО" required autocomplete="name"
+                            autofocus>
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-user"></span>
                             </div>
                         </div>
-                        @error('email')
+                        @error('name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -82,7 +85,7 @@
                     </div>
                     <!-- /.col -->
                     <div class="float-right col-6">
-                        <button type="submit" class="btn btn-primary btn-block">Cброс пароля</button>
+                        <button type="submit" class="btn btn-primary btn-block">Зарегистрация</button>
                     </div>
                     <!-- /.col -->
                 </form>

@@ -65,7 +65,7 @@
             <div class="card-body">
               @if (Auth()->user()->permissions->add)
               <a href="{{ route('user.create') }}" class="btn btn-success mb-3">+ Добавить</a>
-              <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавление через почту</a>
+              <a href="{{ route('user.mass_create') }}" class="btn btn-success mb-3">+ Добавление через почту</a>
               @endif
               <div class="table-responsive">
                 @if (count($users))
@@ -74,7 +74,10 @@
                     <tr>
                       <th>ФИО</th>
                       <th>Email</th>
+                      @if (Auth()->user()->permissions->activated or Auth()->user()->permissions->edit or
+                      Auth()->user()->permissions->delite)
                       <th>дествие</th>
+                      @endif
                     </tr>
                   </thead>
                   <tbody>
@@ -82,14 +85,20 @@
                     <tr>
                       <td><a href="{{ route('user.show', ['user' => $user->id]) }}">{{ $user->name }}</a></td>
                       <td>{{ $user->email }}</td>
+
+                      @if (Auth()->user()->permissions->activated or Auth()->user()->permissions->edit or
+                      Auth()->user()->permissions->delite)
                       <td>
-                      @if ($confirmEachNewRegisteredUser and !$user->activated and Auth()->user()->permissions->activated)
-                        <button id="confirmation{{$user->id}}" type="button" name="activated" value="1" data-user="{{ $user->name }}" data-id="{{ $user->id }}" class="btn btn-secondary btn-sm float-left mr-1">
+                        @if ($confirmEachNewRegisteredUser and !$user->activated and
+                        Auth()->user()->permissions->activated)
+                        <button id="confirmation{{$user->id}}" type="button" name="activated" value="1"
+                          data-user="{{ $user->name }}" data-id="{{ $user->id }}"
+                          class="btn btn-secondary btn-sm float-left mr-1">
                           Подтвердите
                         </button>
-                      @endif
+                        @endif
 
-                      @if (Auth()->user()->permissions->edit)
+                        @if (Auth()->user()->permissions->edit)
                         <a href="{{ route('user.edit', ['user' => $user->id]) }}"
                           class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
@@ -107,8 +116,8 @@
                           </button>
                         </form>
                         @endif
-
                       </td>
+                      @endif
                     </tr>
                     @endforeach
                   </tbody>
@@ -157,7 +166,7 @@
         $.ajax({
           method: "GET",
           url: "{{ route('user.index') }}",
-          data: { 
+          data: {
             name: buttonsConfirmation[i].name,
             user_id: buttonsConfirmation[i].dataset.id,
             result: buttonsConfirmation[i].value
@@ -167,9 +176,14 @@
           }
         })
           .done(function (floors) {
-            
+
             let divSuccess = document.getElementById('success');
-            divSuccess.insertAdjacentHTML('beforeend',`<div class="alert alert-success">Пользователь ${buttonsConfirmation[i].dataset.user} потвержден.</div>`);
+
+            if (divSuccess.getElementsByTagName("div")[0]) {
+              divSuccess.removeChild(divSuccess.getElementsByTagName("div")[0]);
+            }
+
+            divSuccess.insertAdjacentHTML('beforeend', `<div class="alert alert-success">Пользователь ${buttonsConfirmation[i].dataset.user} потвержден.</div>`);
             buttonsConfirmation[i].remove();
 
           });
@@ -178,7 +192,7 @@
     })
 
   }
-  
-  
+
+
 </script>
 @endsection

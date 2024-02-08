@@ -12,13 +12,18 @@ use Illuminate\Queue\SerializesModels;
 class MassRegister extends Mailable
 {
     use Queueable, SerializesModels;
+    public $id;
+    public $mail;
+    public $url;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($id, $mail)
     {
-        //
+        $this->id = $id;
+        $this->mail = $mail;
+        $this->url = route('registr_invitation', ['id' => $id, 'mail' => $mail]);
     }
 
     /**
@@ -27,7 +32,7 @@ class MassRegister extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mass Register',
+            subject: 'Регистрация',
         );
     }
 

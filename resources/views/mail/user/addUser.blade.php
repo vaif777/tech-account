@@ -6,7 +6,7 @@
 Пароль :{{ $password }}
 
 <x-mail::button :url="$url">
-Перейти на вход.
+Авторизация
 </x-mail::button>
 
 <br>

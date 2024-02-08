@@ -4,10 +4,13 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Mail\User\AddUser;
+use App\Mail\User\MassRegister;
 use App\Models\Settings;
+use App\Models\TemporaryDataForRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
@@ -72,13 +75,13 @@ class UserController extends Controller
         ]);
 
         $data = $request->all();
-        unset($data['name'], $data['email'], $data['activated']);
+        unset($data['name'], $data['email'], $data['activated_user']);
         $password = Str::random(10);
 
         if (Settings::query()->find(1)->value('confirm_each_new_registered_user')) {
-            $activated = isset($request->activated) ? 1 : 0;
+            $activated_user = isset($request->activated_user) ? 1 : 0;
         } else {
-            $activated = 1;
+            $activated_user = 1;
         }
 
         $user = User::create([
@@ -86,7 +89,7 @@ class UserController extends Controller
             'email' => $request->email,
             'email_verified_at' => NOW(),
             'password' => Hash::make($password),
-            'activated' => $activated,
+            'activated' => $activated_user,
         ]);
 
         $user->permissions()->create($data);
@@ -94,6 +97,55 @@ class UserController extends Controller
 
         return redirect()->route('user.create')->with('success', "Ползователь $request->name добавлен. Пароль: $password");
     }
+
+    public function massCreate()
+    {
+        $confirmEachNewRegisteredUser = Settings::query()->find(1)->value('confirm_each_new_registered_user');
+
+        return view('user.massCreate', [
+            'confirmEachNewRegisteredUser' => $confirmEachNewRegisteredUser,
+        ]);
+    }
+
+    public function massStore(Request $request)
+    {
+
+        $data = explode(",", strip_tags(str_replace(' ', '',preg_replace('/\r\n|\r|\n/u ', '',$request->email))));
+        $email = [];
+        
+        foreach ($data as $v) {
+            $email[]['email'] =  $v;
+        }
+
+        $validator = Validator::make($email, [
+            '*.email' => 'required|string|email|max:255|unique:users',
+        ])->validate();
+
+
+        $data = $request->all();
+        unset($data['email']);
+
+        foreach ($email as $v) {
+
+            $data['email'] = $v['email'];
+
+            if (Settings::query()->find(1)->value('confirm_each_new_registered_user')) {
+                $activated_user = isset($request->activated_user) ? 1 : 0;
+            } else {
+                $activated_user = 1;
+            }
+
+            $data['activated_user'] = $activated_user;
+    
+            $tmpUser = TemporaryDataForRegistration::create($data);
+            Mail::to($data['email'])->send(new MassRegister($tmpUser->id, $data['email']));  
+            
+        }
+
+        dd($data);
+        return redirect()->route('user.mass_create')->with('success', "Ползователи добавлены.");
+    }
+
 
     /**
      * Display the specified resource.

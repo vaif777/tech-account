@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivatedController;
 use App\Http\Controllers\FloorController;
+use App\Http\Controllers\RegistrationInvitationController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\SettingsController;
@@ -23,11 +24,10 @@ use App\Http\Controllers\HomeController;
 
 Auth::routes(['verify' => true]);
 
-Route::group(['middleware' => ['auth', 'verified']], function(){
+Route::get('/activated', [ActivatedController::class, 'index'])->name('activated')->middleware(['auth', 'verified']);
 
-    Route::get('/activated', [ActivatedController::class, 'index'])->name('activated');
-    
-});
+Route::get('/registr-invitation/{id}/{mail}', [RegistrationInvitationController::class, 'formRegistr'])->name('registr_invitation');
+Route::post('/registr-invitation/store', [RegistrationInvitationController::class, 'store'])->name('registr_invitation.store');
 
 Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser', 'visibleSections']], function(){
 
@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
         Route::resource('/room', RoomController::class);
     });
 
+    Route::get('/user/mass-create', [UserController::class, 'massCreate'])->name('user.mass_create');
+    Route::post('/user/mass-store', [UserController::class, 'massStore'])->name('user.mass-store');
     Route::resource('/user', UserController::class);
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     

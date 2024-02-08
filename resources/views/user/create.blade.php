@@ -83,7 +83,7 @@
                   <div class="col-sm-2">
                     <div class="form-group clearfix">
                       <div class="icheck-secondary d-inline">
-                        <input value="1" name="delite" type="checkbox" {{ old('delite') ? 'checked' : '' }} id="checkboxsecondary9">
+                        <input value="1" name="activated" type="checkbox" {{ old('activated') ? 'checked' : '' }} id="checkboxsecondary9">
                         <label for="checkboxsecondary9">
                           Потверждеие пользователей
                         </label>
@@ -91,7 +91,6 @@
                     </div>
                   </div>
                 </div>
-                @endif
 
                 <div class="form-group">
                   <label>Разделы которые может видеть пользователи:</label>
@@ -178,7 +177,7 @@
                   <div class="col-sm-6">
                     <div class="form-group clearfix">
                       <div class="icheck-secondary d-inline">
-                        <input value="1" name="activated" type="checkbox" {{ old('activated') ? 'checked' : '' }} id="checkboxsecondary8">
+                        <input value="1" name="activated_user" type="checkbox" {{ old('activated_user') ? 'checked' : '' }} id="checkboxsecondary8">
                         <label for="checkboxsecondary8">
                          Активировать
                         </label>

@@ -1,12 +1,12 @@
 <x-mail::message>
-# Introduction
+# Регистрация
 
-The body of your message.
+Администрация сайта отправила вам ссылку для регистрации чтобы перейти на форму нажмите на кнопку
 
-<x-mail::button :url="''">
-Button Text
+<x-mail::button :url="$url">
+Регистрация.
 </x-mail::button>
 
-Thanks,<br>
-{{ config('app.name') }}
+<br>
+Администрация.
 </x-mail::message>

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('temporary_data_for_registrations', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->string('email');
             $table->boolean('add')->default(false);
             $table->boolean('edit')->default(false);
             $table->boolean('delite')->default(false);
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('temporary_data_for_registrations');
     }
 };
