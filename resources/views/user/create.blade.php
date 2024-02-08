@@ -91,7 +91,8 @@
                     </div>
                   </div>
                 </div>
-
+                @endif
+                
                 <div class="form-group">
                   <label>Разделы которые может видеть пользователи:</label>
                 </div>

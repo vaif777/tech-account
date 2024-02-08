@@ -142,7 +142,6 @@ class UserController extends Controller
             
         }
 
-        dd($data);
         return redirect()->route('user.mass_create')->with('success', "Ползователи добавлены.");
     }
 
