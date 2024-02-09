@@ -65,7 +65,9 @@
             <div class="card-body">
               @if (Auth()->user()->permissions->add)
               <a href="{{ route('user.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+              @if ($massAdditionByMail)
               <a href="{{ route('user.mass_create') }}" class="btn btn-success mb-3">+ Добавление через почту</a>
+              @endif
               @endif
               <div class="table-responsive">
                 @if (count($users))
@@ -74,8 +76,8 @@
                     <tr>
                       <th>ФИО</th>
                       <th>Email</th>
-                      @if (Auth()->user()->permissions->activated or Auth()->user()->permissions->edit or
-                      Auth()->user()->permissions->delite)
+                      @if (Auth()->user()->permissions->to_activate or Auth()->user()->permissions->edit or
+                      Auth()->user()->permissions->delete)
                       <th>дествие</th>
                       @endif
                     </tr>
@@ -87,10 +89,10 @@
                       <td>{{ $user->email }}</td>
 
                       @if (Auth()->user()->permissions->activated or Auth()->user()->permissions->edit or
-                      Auth()->user()->permissions->delite)
+                      Auth()->user()->permissions->delete)
                       <td>
                         @if ($confirmEachNewRegisteredUser and !$user->activated and
-                        Auth()->user()->permissions->activated)
+                        Auth()->user()->permissions->to_activate)
                         <button id="confirmation{{$user->id}}" type="button" name="activated" value="1"
                           data-user="{{ $user->name }}" data-id="{{ $user->id }}"
                           class="btn btn-secondary btn-sm float-left mr-1">
@@ -105,7 +107,7 @@
                         </a>
                         @endif
 
-                        @if (Auth()->user()->permissions->delite)
+                        @if (Auth()->user()->permissions->delete)
                         <form action="{{ route('user.destroy', ['user' => $user->id]) }}" method="post"
                           class="float-left">
                           @csrf

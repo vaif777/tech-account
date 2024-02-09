@@ -52,7 +52,6 @@
           </div>
           <!-- /.card-body -->
         </div>
-
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">

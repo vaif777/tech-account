@@ -32,7 +32,9 @@ class UserController extends Controller
     {
 
         $users = User::query()->select()->where('id', '<>', Auth()->user()->id)->orderBy('activated')->get();
-        $confirmEachNewRegisteredUser = Settings::query()->find(1)->value('confirm_each_new_registered_user');
+        $settings = Settings::query()->find(1);
+        $confirmEachNewRegisteredUser = $settings->confirm_each_new_registered_user;
+        $massAdditionByMail = $settings->mass_addition_by_mail;
 
         if ($request->ajax()) {
 
@@ -47,6 +49,7 @@ class UserController extends Controller
         return view('user.index', [
             'users' => $users,
             'confirmEachNewRegisteredUser' => $confirmEachNewRegisteredUser,
+            'massAdditionByMail' => $massAdditionByMail,
         ]);
 
     }

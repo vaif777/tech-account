@@ -68,7 +68,7 @@
 
         $.ajax({
           method: "GET",
-          url: "{{ route('settings') }}",
+          url: "{{ route('setting') }}",
           data: {
             name: inputSettings[i].name,
             result: inputSettings[i].checked ? 1 : 0

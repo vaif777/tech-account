@@ -142,11 +142,11 @@
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-              @if (Auth()->user()->permissions->SCS)
+              @if (Auth()->user()->permissions->network_infrastructure)
               <li class="nav-item">
               <a href="#" class="nav-link">
                 <p>
-                  СКС
+                Сетевая инфраструктура
                   <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
@@ -189,11 +189,11 @@
           </li>
           @endif
 
-          @if (Auth()->user()->permissions->telephony)
+          @if (Auth()->user()->permissions->telephone_infrastructure)
           <li class="nav-item">
             <a href="#" class="nav-link">
               <p>
-                Телефония
+              Телефонная инфраструктура
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -330,9 +330,9 @@
           </li>
           @endif
 
-          @if (Auth()->user()->permissions->settings)
+          @if (Auth()->user()->permissions->setting)
           <li class="nav-item">
-            <a href="{{ route('settings') }}" class="nav-link">
+            <a href="{{ route('setting') }}" class="nav-link">
               <p>
                 Настройки
               </p>

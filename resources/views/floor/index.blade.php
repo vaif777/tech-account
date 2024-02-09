@@ -78,7 +78,9 @@
           <!-- Main row -->
           <div class="row">
             <div class="card-body">
+            @if (Auth()->user()->permissions->add)
               <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+              @endif
               <div class="table-responsive">
                 @if (count($floors))
                 <table id="floorTbl" class="table table-bordered table-hover text-nowrap">
@@ -86,7 +88,10 @@
                     <tr>
                       <th>Название этажа</th>
                       <th>Здание</th>
+                      @if (Auth()->user()->permissions->edit or
+                      Auth()->user()->permissions->delete)
                       <th>дествие</th>
+                      @endif
                     </tr>
                   </thead>
                   <tbody>
@@ -95,12 +100,16 @@
                       <td><a href="{{ route('floor.show', ['floor' => $floor->id]) }}">{{ $floor->name }}</a></td>
                       <td><a href="{{ route('building.show', ['building' => $floor->building_id]) }}">{{
                           $floor->building->name }}</a></td>
+                          @if (Auth()->user()->permissions->edit or
+                      Auth()->user()->permissions->delete)
                       <td>
-
+                      @if (Auth()->user()->permissions->edit)
                         <a href="" class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
+                        @endif
 
+                        @if (Auth()->user()->permissions->delete)
                         <form action="" method="post" class="float-left">
                           @csrf
                           @method('DELETE')
@@ -109,7 +118,9 @@
                             <i class="fas fa-trash-alt"></i>
                           </button>
                         </form>
+                        @endif
                       </td>
+                      @endif
                     </tr>
                     @endforeach
                   </tbody>
@@ -135,6 +146,8 @@
 @section('script')
 <!-- Select2 -->
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+<!-- Select2 --> 
+<script src="{{ asset('public/app/filters/floor/floor_filter.js') }}"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -144,77 +157,6 @@
     $('.select2bs4').select2({
       theme: 'bootstrap4'
     })
-  })
-</script>
-<script>
-
-  let selectBuildings = document.getElementById('buildings');
-
-  $(document).ready(function () {
-    $(selectBuildings).on('change', (function () {
-
-      $.ajax({
-        method: "GET",
-        url: "{{ route('floor.index', ['building' => 'all']) }}",
-        data: { building_id: selectBuildings.value },
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      })
-        .done(function (floors) {
-
-          let floorTbl = document.getElementById('floorTbl');
-          floorTbl.removeChild(floorTbl.getElementsByTagName("tbody")[0]);
-          let floorBody = document.createElement("tbody");
-
-          for (let i = 0; i < floors.length; i++) {
-
-            let row = document.createElement("tr");
-
-            let url = "{{ asset('floor') }}";
-            let cell = document.createElement("td");
-            cell.insertAdjacentHTML('beforeend', `<a href="${url}/${floors[i]['id']}">${floors[i]['name']}</a>`);
-            row.appendChild(cell);
-
-            url = "{{ asset('building') }}";
-            cell = document.createElement("td");
-            cell.insertAdjacentHTML('beforeend', `<a href="${url}/${floors[i]['building_id']}">${floors[i]['building_name']}</a>`);
-            row.appendChild(cell);
-
-            url = "{{ asset('floor') }}";
-            cell = document.createElement("td");
-            cell.insertAdjacentHTML(
-              'beforeend',
-              `<a href="${url}/${floors[i]['id']}/edit" class="btn btn-info btn-sm float-left mr-1">
-                <i class="fas fa-pencil-alt"></i>
-            </a>
-
-            <form action="" method="post" class="float-left">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger btn-sm"
-                onclick="return confirm('Подтвердите удаление')">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </form>`
-            );
-            row.appendChild(cell);
-
-            floorBody.appendChild(row);
-          }
-
-          floorTbl.appendChild(floorBody);
-
-          let url = location.pathname;
-          urlArr = url.split('/')
-          index = urlArr.indexOf('index');
-          urlArr[index - 1] = selectBuildings.value;
-          url = urlArr.join('/');
-          history.pushState({}, '', url);
-
-        });
-    }))
-
   })
 </script>
 @endsection

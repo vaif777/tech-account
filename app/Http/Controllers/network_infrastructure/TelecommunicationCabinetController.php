@@ -1,25 +1,38 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\network_infrastructure;
 
+use App\Http\Controllers\Controller;
+use App\Models\Building;
+use App\Models\Floor;
 use Illuminate\Http\Request;
 
-class RoomController extends Controller
+class TelecommunicationCabinetController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('cabinet.index', [
+            //'buildings' => json_encode($buildings->toArray()),
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $buildings = Building::query()->select('id', 'name')->get();
+
+        if($request->ajax()){
+            return Floor::query()->select('id', 'name')->where('building_id', $request->building_id)->orderBy('name')->get()->toArray();
+        }
+
+        return view('cabinet.create', [
+            'buildings' => json_encode($buildings->toArray()),
+        ]);
     }
 
     /**

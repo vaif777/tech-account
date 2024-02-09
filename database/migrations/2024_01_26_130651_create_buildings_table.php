@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('address');
-            //$table->string('number_of_floors')->nullable();
             $table->timestamps();
         });
     }

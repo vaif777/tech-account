@@ -10,7 +10,6 @@
     </div><!-- /.container-fluid -->
   </div>
   <!-- /.content-header -->
-
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
@@ -64,22 +63,6 @@
                     <textarea class="form-control" name="homemade" rows="3"
                       placeholder="Этажи писать через запятую.">{{ old('homemade') }}</textarea>
                   </div>
-                  <!-- <div class="form-group">
-                    <label for="exampleInputPassword1">Комнаты</label>
-                    <div class="row">
-                      <div class="col-5">
-                        <input type="text" class="form-control" placeholder="от">
-                      </div>
-                      <div class="col-5">
-                        <input type="text" class="form-control" placeholder="до">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="">Комноты не входящие в диапазон (писать через пробел
-                      обязательно)</label>
-                    <textarea class="form-control" rows="3" placeholder="Кмноты писать через пробел."></textarea>
-                  </div> -->
                   <div class="form-group">
                     <button type="submit" class="btn btn-primary">Добавить</button>
                   </div>
@@ -90,7 +73,6 @@
           </div>
           <!-- /.card-body -->
         </div>
-
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">

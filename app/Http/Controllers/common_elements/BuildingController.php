@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\common_elements;
 
+use App\Http\Controllers\Controller;
 use App\Models\Building;
 use App\Models\Floor;
 use Illuminate\Http\Request;

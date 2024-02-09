@@ -18,12 +18,13 @@ return new class extends Migration
             $table->boolean('edit')->default(false);
             $table->boolean('delite')->default(false);
             $table->boolean('activated')->default(false);
-            $table->boolean('SCS')->default(false);
-            $table->boolean('telephony')->default(false);
+            $table->boolean('to_activate')->default(false);
+            $table->boolean('network_infrastructure')->default(false);
+            $table->boolean('telephone_infrastructure')->default(false);
             $table->boolean('storage')->default(false);
             $table->boolean('common_elements')->default(false);
             $table->boolean('user')->default(false);
-            $table->boolean('settings')->default(false);
+            $table->boolean('setting')->default(false);
             $table->timestamps();
         });
     }

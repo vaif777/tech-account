@@ -17,17 +17,18 @@ class VisibleSections
     public function handle(Request $request, Closure $next): Response
     {
         $userVisible = Auth()->user()->permissions->toArray();
-        $comtroller = strstr(request()->route()->getName(), '.', true) ? strstr(request()->route()->getName(), '.', true) : request()->route()->getName();
+        $controller = strstr(request()->route()->getName(), '.', true) ? strstr(request()->route()->getName(), '.', true) : request()->route()->getName();
         $prefix = str_replace('-', '_', trim(request()->route()->getPrefix(), '/')); 
 
-        if (array_key_exists($comtroller, $userVisible)) {
+        //dd($userVisible, $controller);
+        if (array_key_exists($controller, $userVisible)) {
 
-            if ($userVisible[$comtroller]) return $next($request);
+            if ($userVisible[$controller]) return $next($request);
            
             return abort(404); 
         }
 
-        //dd($userVisible);
+        
         if (array_key_exists($prefix, $userVisible)) {
 
             if ($userVisible[$prefix]) return $next($request);

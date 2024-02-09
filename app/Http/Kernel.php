@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'add' => \App\Http\Middleware\Add::class, 
         'edit' => \App\Http\Middleware\Edit::class, 
         'delite' => \App\Http\Middleware\Delite::class,
+        'registrInvitation' => \App\Http\Middleware\RegistrInvitation::class,
         
     ];
 }
