@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
 use App\Mail\User\AddUser;
@@ -38,7 +38,7 @@ class UserController extends Controller
 
         if ($request->ajax()) {
 
-            if (Auth()->user()->permissions->activated) {
+            if (Auth()->user()->permissions->to_activate) {
 
                 User::query()->find($request->user_id)->update([
                     $request->name => $request->result,
@@ -78,13 +78,14 @@ class UserController extends Controller
         ]);
 
         $data = $request->all();
-        unset($data['name'], $data['email'], $data['activated_user']);
+        unset($data['name'], $data['email'], $data['activated']);
         $password = Str::random(10);
+        //dd($data);
 
         if (Settings::query()->find(1)->value('confirm_each_new_registered_user')) {
-            $activated_user = isset($request->activated_user) ? 1 : 0;
+            $activated = isset($request->activated) ? 1 : 0;
         } else {
-            $activated_user = 1;
+            $activated = 1;
         }
 
         $user = User::create([
@@ -92,7 +93,7 @@ class UserController extends Controller
             'email' => $request->email,
             'email_verified_at' => NOW(),
             'password' => Hash::make($password),
-            'activated' => $activated_user,
+            'activated' => $activated,
         ]);
 
         $user->permissions()->create($data);
@@ -113,7 +114,7 @@ class UserController extends Controller
     public function massStore(Request $request)
     {
 
-        $data = explode(",", strip_tags(str_replace(' ', '',preg_replace('/\r\n|\r|\n/u ', '',$request->email))));
+        $data = explode(",", strip_tags(str_replace(' ', '',preg_replace('/\r\n|\r|\n/u/', '',$request->email))));
         $email = [];
         
         foreach ($data as $v) {
@@ -133,12 +134,12 @@ class UserController extends Controller
             $data['email'] = $v['email'];
 
             if (Settings::query()->find(1)->value('confirm_each_new_registered_user')) {
-                $activated_user = isset($request->activated_user) ? 1 : 0;
+                $activated = isset($request->activated) ? 1 : 0;
             } else {
-                $activated_user = 1;
+                $activated = 1;
             }
 
-            $data['activated_user'] = $activated_user;
+            $data['activated'] = $activated;
     
             $tmpUser = TemporaryDataForRegistration::create($data);
             Mail::to($data['email'])->send(new MassRegister($tmpUser->id, $data['email']));  

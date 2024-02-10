@@ -21,7 +21,8 @@ return new class extends Migration
             $table->boolean('network_infrastructure')->default(false);
             $table->boolean('telephone_infrastructure')->default(false);
             $table->boolean('storage')->default(false);
-            $table->boolean('common_elements')->default(false);
+            $table->boolean('reference')->default(false);
+            $table->boolean('facilities')->default(false);
             $table->boolean('user')->default(false);
             $table->boolean('setting')->default(false);
             $table->timestamps();

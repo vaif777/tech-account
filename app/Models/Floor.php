@@ -10,6 +10,7 @@ class Floor extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'building_id',
     ];
 
     public function rooms (){

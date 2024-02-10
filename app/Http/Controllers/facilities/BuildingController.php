@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\common_elements;
+namespace App\Http\Controllers\facilities;
 
 use App\Http\Controllers\Controller;
 use App\Models\Building;
@@ -26,9 +26,7 @@ class BuildingController extends Controller
      */
     public function create()
     {
-        return view('building.create', [
-
-        ]);
+        return view('building.create',);
     }
 
     /**

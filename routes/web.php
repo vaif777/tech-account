@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Auth\ActivatedController;
-use  App\Http\Controllers\Auth\RegistrationInvitationController;
-use App\Http\Controllers\common_elements\FloorController;
-use App\Http\Controllers\common_elements\RoomController;
-use App\Http\Controllers\common_elements\BuildingController;
+use App\Http\Controllers\Auth\RegistrationInvitationController;
+use App\Http\Controllers\deviceAndMaterial\MaterialController;
+use App\Http\Controllers\facilities\FloorController;
+use App\Http\Controllers\facilities\RoomController;
+use App\Http\Controllers\facilities\BuildingController;
+use App\Http\Controllers\reference\MaterialsReferenceController;
 use App\Http\Controllers\settings\SettingController;
 use App\Http\Controllers\network_infrastructure\TelecommunicationCabinetController;
 use App\Http\Controllers\User\UserController;
@@ -37,12 +39,22 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/home', [HomeController::class, 'index'])->name('home'); 
 
+    Route::group(['prefix' => 'Device-and-material'], function(){
+        
+        Route::resource('/material', MaterialController::class);
+    });
+    
+    Route::group(['prefix' => 'reference'], function(){
+        
+        Route::resource('/material-reference', MaterialsReferenceController::class);
+    });
+
     Route::group(['prefix' => 'network-infrastructure'], function(){
         
         Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
     });
 
-    Route::group(['prefix' => 'common-elements'], function(){
+    Route::group(['prefix' => 'facilities'], function(){
         
         Route::resource('/building', BuildingController::class);
         Route::resource('/floor', FloorController::class, ['except' => ['index']]);

@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     $.ajax({
       method: "GET",
-      url: "{{ route('floor.index', ['building' => 'all']) }}",
+      url: route('floor.index', 'all'),
       data: { building_id: selectBuildings.value },
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -16,51 +16,42 @@ $(document).ready(function () {
         let floorTbl = document.getElementById('floorTbl');
         floorTbl.removeChild(floorTbl.getElementsByTagName("tbody")[0]);
         let floorBody = document.createElement("tbody");
+        let trAction = document.getElementById('action');
+
 
         for (let i = 0; i < floors.length; i++) {
 
           let row = document.createElement("tr");
 
-          let url = "";
           let cell = document.createElement("td");
-          cell.insertAdjacentHTML('beforeend', `<a href="${url}/${floors[i]['id']}">${floors[i]['name']}</a>`);
+          cell.insertAdjacentHTML('beforeend', `<a href="${route('floor.show', floors[i]['id'])}">${floors[i]['name']}</a>`);
           row.appendChild(cell);
 
-          url = "";
           cell = document.createElement("td");
-          cell.insertAdjacentHTML('beforeend', `<a href="${url}/${floors[i]['building_id']}">${floors[i]['building_name']}</a>`);
+          cell.insertAdjacentHTML('beforeend', `<a href="${route('building.show', floors[i]['building_id'])}">${floors[i]['building_name']}</a>`);
           row.appendChild(cell);
 
-          url = "";
-          cell = document.createElement("td");
-          cell.insertAdjacentHTML(
-            'beforeend',
-            `<a href="${url}/${floors[i]['id']}/edit" class="btn btn-info btn-sm float-left mr-1">
-              <i class="fas fa-pencil-alt"></i>
-          </a>
+          if (trAction) {
 
-          <form action="" method="post" class="float-left">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger btn-sm"
-              onclick="return confirm('Подтвердите удаление')">
+            cell = document.createElement("td");
+            cell.insertAdjacentHTML(
+              'beforeend',
+              `<a href="${route('floor.edit', floors[i]['id'])}" class="btn btn-info btn-sm float-left mr-1">
+                <i class="fas fa-pencil-alt"></i>
+            </a> 
+
+            <a href="${route('floor.destroy', floors[i]['id'])}" class="btn btn-danger btn-sm">
               <i class="fas fa-trash-alt"></i>
-            </button>
-          </form>`
-          );
-          row.appendChild(cell);
+            </a>`
+            );
+            row.appendChild(cell);
+          }
 
           floorBody.appendChild(row);
         }
 
         floorTbl.appendChild(floorBody);
-
-        let url = location.pathname;
-        urlArr = url.split('/')
-        index = urlArr.indexOf('index');
-        urlArr[index - 1] = selectBuildings.value;
-        url = urlArr.join('/');
-        history.pushState({}, '', url);
+        history.pushState({}, '', route('floor.index', selectBuildings.value));
 
       });
   }))

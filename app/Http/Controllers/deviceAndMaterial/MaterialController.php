@@ -1,18 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\common_elements;
+namespace App\Http\Controllers\deviceAndMaterial;
 
 use App\Http\Controllers\Controller;
+use App\Models\Material;
+use App\Models\MaterialsReference;
 use Illuminate\Http\Request;
 
-class RoomController extends Controller
+class MaterialController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $materials = Material::query()->select()->get();
+        
+        return view('deviceAndMaterial.material.index', [
+            'materials' => $materials,
+        ]);
     }
 
     /**
@@ -20,7 +26,11 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
+        $materialReferences = MaterialsReference::query()->select()->get();
+        
+        return view('deviceAndMaterial.material.create', [
+            'materialReferences' => $materialReferences
+        ]);
     }
 
     /**

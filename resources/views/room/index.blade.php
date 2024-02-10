@@ -4,7 +4,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 id=test class="m-0">Здания</h1>
+        <h1 id=test class="m-0">Комнаты</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -34,19 +34,11 @@
                 <label>Здание</label>
                 <select class="form-control select2" id="buildings" style="width: 100%;">
                   
-                  @if ($building_id == 'all')
-                  <option value="all" selected="selected">Выберите здание</option>
-                  @else
-                  <option value="all">Выберите здание</option>
-                  @endif
-
                   @foreach($buildings as $building)
 
-                  @if ($building_id == $building->id)
-                  <option value="{{ $building->id }}" selected="selected">{{ $building->name }}</option>
-                  @else
+                 
                   <option value="{{ $building->id }}">{{ $building->name }}</option>
-                  @endif
+           
 
                   @endforeach
                 </select>
@@ -82,11 +74,12 @@
               <a href="{{ route('floor.create') }}" class="btn btn-success mb-3">+ Добавить</a>
               @endif
               <div class="table-responsive">
-                @if (count($floors))
+                @if (count($rooms))
                 <table id="floorTbl" class="table table-bordered table-hover text-nowrap">
                   <thead>
                     <tr>
                       <th>Название этажа</th>
+                      <th>Этаж</th>
                       <th>Здание</th>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete)
@@ -95,11 +88,13 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($floors as $floor)
+                    @foreach($rooms as $room)
                     <tr>
-                      <td><a href="{{ route('floor.show', ['floor' => $floor->id]) }}">{{ $floor->name }}</a></td>
-                      <td><a href="{{ route('building.show', ['building' => $floor->building_id]) }}">{{
-                          $floor->building->name }}</a></td>
+                      <td><a href="{{ route('room.show', ['room' => $room->id]) }}">{{ $room->name }}</a></td>
+                      <td><a href="{{ route('floor.show', ['floor' => $room->floor->id]) }}">{{
+                          $room->floor->name }}</a></td>
+                      <td><a href="{{ route('building.show', ['building' => $room->floor->building_id]) }}">{{
+                          $room->floor->building->name }}</a></td>
                           @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete)
                       <td>

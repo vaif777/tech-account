@@ -27,6 +27,8 @@
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
   <!-- iCheck for checkboxes and radio inputs -->
   <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  @routes
+</head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
@@ -142,11 +144,11 @@
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-              @if (Auth()->user()->permissions->network_infrastructure)
-              <li class="nav-item">
+            @if (Auth()->user()->permissions->network_infrastructure)
+            <li class="nav-item">
               <a href="#" class="nav-link">
                 <p>
-                Сетевая инфраструктура
+                  Сетевая инфраструктура
                   <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
@@ -185,7 +187,7 @@
                   </a>
                 </li>
               </ul>
-            </ul>
+          </ul>
           </li>
           @endif
 
@@ -193,7 +195,7 @@
           <li class="nav-item">
             <a href="#" class="nav-link">
               <p>
-              Телефонная инфраструктура
+                Телефонная инфраструктура
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -283,11 +285,10 @@
           </li>
           @endif
 
-          @if (Auth()->user()->permissions->common_elements)
           <li class="nav-item">
             <a href="#" class="nav-link">
               <p>
-                Общие Элементы
+                Устройства и материалы
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -295,13 +296,74 @@
               <li class="nav-item">
                 <a href="pages/mailbox/read-mail.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Подразделениея</p>
+                  <p>Сетевое оборудование</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('building.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
+                  <p>Оборудование</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('material.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Материалы</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          @if (Auth()->user()->permissions->facilities)
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <p>
+                Cооружения
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('building.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
                   <p>Здания</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('floor.index', ['building' => 'all']) }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Этажи</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('room.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Комноты</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
+
+          @if (Auth()->user()->permissions->reference)
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <p>
+                Справочники
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="materials" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Подразделениея</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('material-reference.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Справочник материалов</p>
                 </a>
               </li>
               <li class="nav-item">

@@ -12,13 +12,14 @@ class Permission extends Model
     protected $fillable = [
         'add',
         'edit',
-        'delite',
+        'delete',
         'to_activate',
         'network_infrastructure',
         'telephone_infrastructure',
         'storage',
-        'common_elements',
-        'users',
+        'reference',
+        'facilities',
+        'user',
         'setting',
     ];
 }

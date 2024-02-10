@@ -4,7 +4,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 id=test class="m-0">Здания</h1>
+        <h1 id=test class="m-0">Пользователи</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -74,7 +74,7 @@
                   <div class="col-sm-2">
                     <div class="form-group clearfix">
                       <div class="icheck-danger d-inline">
-                        <input value="1" name="delite" type="checkbox" {{ old('delite') ? 'checked' : '' }}
+                        <input value="1" name="delete" type="checkbox" {{ old('delete') ? 'checked' : '' }}
                           id="checkboxDanger1">
                         <label for="checkboxDanger1">
                           Удаление
@@ -88,8 +88,8 @@
                     <div class="form-group clearfix">
                       <div class="icheck-secondary d-inline">
                         <input value="1" name="to_activate" type="checkbox" {{ old('to_activate') ? 'checked' : '' }}
-                          id="checkboxsecondary9">
-                        <label for="checkboxsecondary9">
+                          id="checkboxsecondary8">
+                        <label for="checkboxsecondary8">
                           Потверждеие пользователей
                         </label>
                       </div>
@@ -107,10 +107,10 @@
                   <div class="col-sm-2">
                     <div class="form-group clearfix">
                       <div class="icheck-secondary d-inline">
-                        <input value="1" name="SCS" type="checkbox" {{ old('SCS') ? 'checked' : '' }}
+                        <input value="1" name="network_infrastructure" type="checkbox" {{ old('network_infrastructure') ? 'checked' : '' }}
                           id="checkboxsecondary2">
                         <label for="checkboxsecondary2">
-                          СКС
+                        Сетевая инфраструктура
                         </label>
                       </div>
                     </div>
@@ -119,10 +119,10 @@
                   <div class="col-sm-2">
                     <div class="form-group clearfix">
                       <div class="icheck-secondary d-inline">
-                        <input value="1" name="telephony" type="checkbox" {{ old('telephony') ? 'checked' : '' }}
+                        <input value="1" name="telephone_infrastructure" type="checkbox" {{ old('telephone_infrastructure') ? 'checked' : '' }}
                           id="checkboxsecondary3">
                         <label for="checkboxsecondary3">
-                          Телефония
+                        Телефонная инфраструктура
                         </label>
                       </div>
                     </div>
@@ -143,10 +143,10 @@
                   <div class="col-sm-2">
                     <div class="form-group clearfix">
                       <div class="icheck-secondary d-inline">
-                        <input value="1" name="common_elements" type="checkbox" {{ old('common_elements') ? 'checked'
+                        <input value="1" name="facilities" type="checkbox" {{ old('facilities') ? 'checked'
                           : '' }} id="checkboxsecondary5">
                         <label for="checkboxsecondary5">
-                          Общие элементы
+                        Cооружения
                         </label>
                       </div>
                     </div>
@@ -168,10 +168,22 @@
                   <div class="col-sm-2">
                     <div class="form-group clearfix">
                       <div class="icheck-secondary d-inline">
-                        <input value="1" name="settings" type="checkbox" {{ old('settings') ? 'checked' : '' }}
+                        <input value="1" name="setting" type="checkbox" {{ old('setting') ? 'checked' : '' }}
                           id="checkboxsecondary7">
                         <label for="checkboxsecondary7">
                           Настройки
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-2">
+                    <div class="form-group clearfix">
+                      <div class="icheck-secondary d-inline">
+                        <input value="1" name="reference" type="checkbox" {{ old('reference') ? 'checked' : '' }}
+                          id="checkboxsecondary9">
+                        <label for="checkboxsecondary9">
+                        Справочники
                         </label>
                       </div>
                     </div>
@@ -190,8 +202,8 @@
                     <div class="form-group clearfix">
                       <div class="icheck-secondary d-inline">
                         <input value="1" name="activated" type="checkbox" {{ old('activated') ? 'checked' : ''
-                          }} id="checkboxsecondary8">
-                        <label for="checkboxsecondary8">
+                          }} id="checkboxsecondary10">
+                        <label for="checkboxsecondary10">
                           Активировать
                         </label>
                       </div>

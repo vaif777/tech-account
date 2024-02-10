@@ -12,14 +12,15 @@ class TemporaryDataForRegistration extends Model
         'email',
         'add',
         'edit',
-        'delite',
+        'delete',
         'activated',
         'to_activate',
         'network_infrastructure',
         'telephone_infrastructure',
         'storage',
-        'common_elements',
-        'users',
+        'reference',
+        'facilities',
+        'user',
         'setting',
     ];
 }

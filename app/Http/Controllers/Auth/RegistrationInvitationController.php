@@ -28,10 +28,10 @@ class RegistrationInvitationController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $tmpUser = TemporaryDataForRegistration::query()->select(["add", "edit", "delite", "activated", "activated_user", "SCS", "telephony", "storage","common_elements", "user", "settings"])->where(['id' => $request->id, 'email' => $request->email])->first()->toArray();
+        $tmpUser = TemporaryDataForRegistration::query()->select(["add", "edit", "delete", "activated", 'to_activate', 'network_infrastructure', 'telephone_infrastructure', "storage", 'facilities', 'reference', "user", "setting"])->where(['id' => $request->id, 'email' => $request->email])->first()->toArray();
         $data = $request->all();
-        $data["activated"] = $tmpUser["activated_user"];
-        unset($data['id'],$tmpUser['activated_user']);
+        $data["activated"] = $tmpUser["activated"];
+        unset($data['id'], $tmpUser['activated']);
 
         $user = User::create([
             'name' => $data['name'],

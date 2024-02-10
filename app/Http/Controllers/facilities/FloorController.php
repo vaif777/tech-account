@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\common_elements;
+namespace App\Http\Controllers\facilities;
 
 use App\Http\Controllers\Controller;
 use App\Models\Building;
 use App\Models\Floor;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -52,7 +53,10 @@ class FloorController extends Controller
      */
     public function create()
     {
-        //
+        $buildings = Building::query()->select()->get();
+        return view('floor.create', [
+            'buildings' => $buildings
+        ]);
     }
 
     /**
@@ -60,7 +64,41 @@ class FloorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'building_id' => 'required',
+            'name' => 'required',
+            'from' => 'nullable|integer',
+            'before' => 'nullable|integer',
+        ]);
+
+        $data = $request->all();
+        $floor = Floor::create($data);
+        $rooms = [];
+
+        if ($data['homemade']) {
+            $homemade = explode(",", strip_tags(str_replace(' ', '',preg_replace('/\r\n|\r|\n/u', '',$data['homemade']))));
+
+            foreach ($homemade as $v) {
+                $rooms[] = new Room(['name' => $v]);
+            }
+        }
+
+        if ($data['from'] and $data['before']) {
+
+            for ($i = $data['from']; $i <= $data['before']; $i++) {
+                $rooms[] = new Room(['name' => $i]);
+            }
+
+        } 
+        
+        if ($rooms) {
+            $floor->rooms()->saveMany($rooms);
+        }
+        elseif ($data['from'] and !$data['before']) {
+            $floor->rooms()->create(['name' => $data['from']]);
+        }
+
+        return redirect()->route('floor.create')->with('success', 'Этаж добавлен');
     }
 
     /**
