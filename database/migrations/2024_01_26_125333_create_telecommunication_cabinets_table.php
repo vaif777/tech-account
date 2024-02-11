@@ -14,8 +14,16 @@ return new class extends Migration
         Schema::create('telecommunication_cabinets', function (Blueprint $table) {
             $table->id();
             $table->integer('building_id');
+            $table->integer('floor_id')->nullable();
+            $table->integer('room_id')->nullable();
+            $table->integer('storeroom_accounting_id')->nullable();
+            $table->integer('manufacturer_id')->nullable();
+            $table->integer('model_id')->nullable();
+            $table->integer('width')->nullable();
+            $table->integer('height')->nullable();
+            $table->integer('depth')->nullable();
+            $table->integer('unit')->nullable();
             $table->string('name');
-            $table->string('floor');
             $table->timestamps();
         });
     }

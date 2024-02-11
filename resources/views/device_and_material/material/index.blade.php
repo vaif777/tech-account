@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 id=test class="m-0">Материалы</h1>
+          <h1 id=test class="m-0">Телекомуникационный щкаф</h1>
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -23,10 +23,10 @@
             <div class="row">
               <div class="card-body">
               @if (Auth()->user()->permissions->add)
-                <a href="{{ route('material.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+                <a href="{{ route('telecom-cabinet.create') }}" class="btn btn-success mb-3">+ Добавить</a>
                 @endif
                 <div class="table-responsive">
-                  @if (count($materials))
+                  @if (count($telecommCabinets))
                   <table class="table table-bordered table-hover text-nowrap">
                     <thead>
                       <tr>
@@ -38,20 +38,20 @@
                       </tr>
                     </thead>
                     <tbody>
-                    @foreach($materials as $material)
+                    @foreach($telecommCabinets as $сabinet)
                       <tr>
-                        <td><a href="{{ route('material.show', ['material' => $material->id]) }}">{{ $material->name }}</a></td>
+                        <td><a href="{{ route('telecom-cabinet.show', ['telecom_cabinet' => $сabinet->id]) }}">{{  $сabinet->name }}</a></td>
                         @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete)
                         <td>
                         @if (Auth()->user()->permissions->edit)
-                          <a href="{{ route('material.edit', ['material' => $material->id]) }}" class="btn btn-info btn-sm float-left mr-1">
+                          <a href="{{ route('telecom-cabinet.edit', ['telecom_cabinet' =>  $сabinet->id]) }}" class="btn btn-info btn-sm float-left mr-1">
                             <i class="fas fa-pencil-alt"></i>
                           </a>
                           @endif
 
                           @if (Auth()->user()->permissions->delete)
-                          <form action="{{ route('material.destroy', ['material' => $material->id]) }}" method="post" class="float-left">
+                          <form action="{{ route('telecom-cabinet.destroy', ['telecom_cabinet' =>  $сabinet }}" method="post" class="float-left">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm"

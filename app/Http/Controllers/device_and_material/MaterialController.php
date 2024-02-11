@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\deviceAndMaterial;
+namespace App\Http\Controllers\device_and_material;
 
 use App\Http\Controllers\Controller;
 use App\Models\Material;
@@ -16,7 +16,7 @@ class MaterialController extends Controller
     {
         $materials = Material::query()->select()->get();
         
-        return view('deviceAndMaterial.material.index', [
+        return view('device_and_material.material.index', [
             'materials' => $materials,
         ]);
     }
@@ -28,7 +28,7 @@ class MaterialController extends Controller
     {
         $materialReferences = MaterialsReference::query()->select()->get();
         
-        return view('deviceAndMaterial.material.create', [
+        return view('device_and_material.material.create', [
             'materialReferences' => $materialReferences
         ]);
     }

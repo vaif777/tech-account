@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\network_infrastructure;
+namespace App\Http\Controllers\device_and_material;
 
 use App\Http\Controllers\Controller;
 use App\Models\Building;
 use App\Models\Floor;
+use App\Models\Room;
+use App\Models\TelecommunicationCabinet;
 use Illuminate\Http\Request;
 
 class TelecommunicationCabinetController extends Controller
@@ -14,8 +16,10 @@ class TelecommunicationCabinetController extends Controller
      */
     public function index()
     {
-        return view('cabinet.index', [
-            //'buildings' => json_encode($buildings->toArray()),
+        $telecommCabinets = TelecommunicationCabinet::query()->select()->get();
+
+        return view('device_and_material.cabinet.index', [
+            'telecommCabinets' => $telecommCabinets,
         ]);
     }
 
@@ -25,13 +29,13 @@ class TelecommunicationCabinetController extends Controller
     public function create(Request $request)
     {
         $buildings = Building::query()->select('id', 'name')->get();
+        $floors = Floor::query()->select('id', 'name')->get();
+        $rooms = Room::query()->select('id', 'name')->get();
 
-        if($request->ajax()){
-            return Floor::query()->select('id', 'name')->where('building_id', $request->building_id)->orderBy('name')->get()->toArray();
-        }
-
-        return view('cabinet.create', [
-            'buildings' => json_encode($buildings->toArray()),
+        return view('device_and_material.cabinet.create', [
+            'buildings' => $buildings,
+            'floors' => $floors,
+            'rooms' => $rooms,
         ]);
     }
 
@@ -40,7 +44,19 @@ class TelecommunicationCabinetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'manufacturer_id' => 'nullable|integer',
+            'model_id' => 'nullable|integer',
+            'width' => 'nullable|integer',
+            'height' => 'nullable|integer',
+            'depth' => 'nullable|integer',
+            'unit' => 'nullable|integer',
+        ]);
+
+        TelecommunicationCabinet::create($request->all());
+
+        return redirect()->route('telecom-cabinet.create')->with('success', 'Запись добавленна');
     }
 
     /**

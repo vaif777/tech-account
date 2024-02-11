@@ -20,4 +20,8 @@ class Floor extends Model
     public function building(){
         return $this->belongsTo(Building::class);
     }
+
+    public function cabinets (){
+        return $this->hasMany(TelecommunicationCabinet::class);
+    }
 }

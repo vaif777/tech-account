@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\Auth\ActivatedController;
 use App\Http\Controllers\Auth\RegistrationInvitationController;
-use App\Http\Controllers\deviceAndMaterial\MaterialController;
+use App\Http\Controllers\device_and_material\MaterialController;
 use App\Http\Controllers\facilities\FloorController;
 use App\Http\Controllers\facilities\RoomController;
 use App\Http\Controllers\facilities\BuildingController;
 use App\Http\Controllers\reference\MaterialsReferenceController;
 use App\Http\Controllers\settings\SettingController;
-use App\Http\Controllers\network_infrastructure\TelecommunicationCabinetController;
+use App\Http\Controllers\device_and_material\TelecommunicationCabinetController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -39,9 +39,10 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/home', [HomeController::class, 'index'])->name('home'); 
 
-    Route::group(['prefix' => 'Device-and-material'], function(){
+    Route::group(['prefix' => 'device-and-material'], function(){
         
         Route::resource('/material', MaterialController::class);
+        Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
     });
     
     Route::group(['prefix' => 'reference'], function(){
@@ -51,7 +52,7 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
 
     Route::group(['prefix' => 'network-infrastructure'], function(){
         
-        Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
+        
     });
 
     Route::group(['prefix' => 'facilities'], function(){

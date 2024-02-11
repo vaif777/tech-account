@@ -16,4 +16,8 @@ class Room extends Model
     public function floor(){
         return $this->belongsTo(Floor::class);
     }
+
+    public function cabinets (){
+        return $this->hasMany(TelecommunicationCabinet::class);
+    }
 }

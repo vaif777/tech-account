@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
             $table->integer('depth')->nullable();
+            $table->integer('length')->nullable();
             $table->integer('diameter')->nullable();
             $table->boolean('total_length')->default(false);
             $table->integer('count_ports')->nullable(); 
