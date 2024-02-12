@@ -300,11 +300,17 @@
                 </a>
               </li>
               <li class="nav-item">
-                  <a href="{{ route('telecom-cabinet.index') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Телеком. шкафы</p>
-                  </a>
-                </li>
+                <a href="{{ route('telecom-cabinet.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Телеком. шкафы</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('patch-panel.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Патч панель</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="{{ route('building.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>

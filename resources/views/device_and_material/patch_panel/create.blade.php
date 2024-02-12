@@ -4,7 +4,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 id=test class="m-0">Справочник материалов</h1>
+        <h1 id=test class="m-0">Патч панель</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -23,16 +23,32 @@
         <!-- /.card-header -->
         <div class="card-body">
           <div class="form-group">
-            <form method="post" action="{{ route('telecom-cabinet.store') }}">
+            <form method="post" action="{{ route('patch-panel.store') }}">
               @csrf
               <div class="card-body">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Придумайте идентификационный маркер *</label>
-                  <input maxlength="17" type="input" name="name" value="{{ old('name') }}"
-                    class="form-control @error('name') is-invalid @enderror" placeholder="идентификационный маркер">
-                  @error('name')
-                  <div class="invalid-feedback">{{ $message }}</div>
-                  @enderror
+              <label for="exampleInputEmail1">Обезательные данные *</label>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <input maxlength="17" type="input" name="name" value="{{ old('name') }}"
+                        class="form-control @error('name') is-invalid @enderror" placeholder="идентификационный маркер">
+                      @error('name')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <input maxlength="17" type="input" name="count_port" value="{{ old('count_port') }}" class="form-control"
+                        placeholder=" Количество портов">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <input maxlength="17" type="input" name="unit" value="{{ old('unit') }}" class="form-control"
+                        placeholder=" Количество юнитов U">
+                    </div>
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
@@ -49,35 +65,6 @@
                       <select class="form-control select2" name="model_id" style="width: 100%;">
                         <option value="1">Модель</option>
                       </select>
-                    </div>
-                  </div>
-                </div>
-               
-                  <label>Размеры</label>
-        
-                <div class="row">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input maxlength="17" type="input" name="width" value="{{ old('width') }}"
-                        class="form-control" placeholder="Ширена">
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input maxlength="17" type="input" name="height" value="{{ old('height') }}"
-                        class="form-control" placeholder="Высота">
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input maxlength="17" type="input" name="depth" value="{{ old('depth') }}"
-                        class="form-control" placeholder="Глубина">
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input maxlength="17" type="input" name="unit" value="{{ old('unit') }}"
-                        class="form-control" placeholder=" Количество юнитов U">
                     </div>
                   </div>
                 </div>
@@ -115,7 +102,7 @@
         <!-- /.card-header -->
         <div class="card-body">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-group">
                 <label>Здание *</label>
                 <select class="form-control select2" name="building_id" style="width: 100%;">
@@ -123,7 +110,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-group">
                 <label>Этаж</label>
                 <select class="form-control select2" name="floor_id" style="width: 100%;">
@@ -131,10 +118,18 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-group">
                 <label>Комната</label>
                 <select class="form-control select2" name="room_id" style="width: 100%;">
+                  <option value="1">тест</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Телеком шкаф</label>
+                <select class="form-control select2" name="telecommunication_cabinet_id" style="width: 100%;">
                   <option value="1">тест</option>
                 </select>
               </div>
@@ -197,6 +192,6 @@
     //Initialize Select2 Elements
     $('.select2bs4').select2({
       theme: 'boot })
-  })
+    })
 </script>
 @endsection

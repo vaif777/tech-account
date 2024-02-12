@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ActivatedController;
 use App\Http\Controllers\Auth\RegistrationInvitationController;
 use App\Http\Controllers\device_and_material\MaterialController;
+use App\Http\Controllers\device_and_material\PatchPanelController;
 use App\Http\Controllers\facilities\FloorController;
 use App\Http\Controllers\facilities\RoomController;
 use App\Http\Controllers\facilities\BuildingController;
@@ -43,6 +44,7 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
         
         Route::resource('/material', MaterialController::class);
         Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
+        Route::resource('/patch-panel', PatchPanelController::class);
     });
     
     Route::group(['prefix' => 'reference'], function(){

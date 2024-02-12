@@ -22,7 +22,7 @@ class TelecommunicationCabinet extends Model
         'name',
     ];
 
-    public function Building(){
+    public function building(){
         return $this->belongsTo(Building::class);
     }
 
@@ -32,6 +32,15 @@ class TelecommunicationCabinet extends Model
 
     public function room(){
         return $this->belongsTo(Room::class);
+    }
+
+    public function patchPanels (){
+        return $this->hasMany(PatchPanel::class);
+    }
+
+    public function patchPanelNames (){
+        
+        return implode(", ", $this->patchPanels()->select('name')->pluck('name')->toArray());
     }
     
 }

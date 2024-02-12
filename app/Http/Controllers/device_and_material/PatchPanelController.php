@@ -5,34 +5,34 @@ namespace App\Http\Controllers\device_and_material;
 use App\Http\Controllers\Controller;
 use App\Models\Building;
 use App\Models\Floor;
+use App\Models\PatchPanel;
 use App\Models\Room;
-use App\Models\TelecommunicationCabinet;
 use Illuminate\Http\Request;
 
-class TelecommunicationCabinetController extends Controller
+class PatchPanelController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $telecommCabinets = TelecommunicationCabinet::all();
+        $patchPanels = PatchPanel::query()->select()->get();
 
-        return view('device_and_material.cabinet.index', [
-            'telecommCabinets' => $telecommCabinets,
+        return view('device_and_material.patch_panel.index', [
+            'patchPanels' => $patchPanels,
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
         $buildings = Building::query()->select('id', 'name')->get();
         $floors = Floor::query()->select('id', 'name')->get();
         $rooms = Room::query()->select('id', 'name')->get();
 
-        return view('device_and_material.cabinet.create', [
+        return view('device_and_material.patch_panel.create', [
             'buildings' => $buildings,
             'floors' => $floors,
             'rooms' => $rooms,
@@ -48,15 +48,19 @@ class TelecommunicationCabinetController extends Controller
             'name' => 'required|string|max:255',
             'manufacturer_id' => 'nullable|integer',
             'model_id' => 'nullable|integer',
-            'width' => 'nullable|integer',
-            'height' => 'nullable|integer',
-            'depth' => 'nullable|integer',
-            'unit' => 'nullable|integer',
+            'unit' => 'integer',
+            'count_port' => 'integer',
         ]);
 
-        TelecommunicationCabinet::create($request->all());
+        $patchPanel = PatchPanel::create($request->all());
 
-        return redirect()->route('telecom-cabinet.create')->with('success', 'Запись добавленна');
+        for ($i = 1; $i <= $request->count_port; ++$i){
+            $patchPanel->PatchPanelPorts()->create([
+                'number' => $i,
+            ]);
+        }
+
+        return redirect()->route('patch-panel.create')->with('success', 'Запись добавленна');
     }
 
     /**

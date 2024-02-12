@@ -21,4 +21,8 @@ class Building extends Model
     public function cabinets (){
         return $this->hasMany(TelecommunicationCabinet::class);
     }
+
+    public function patchPanels (){
+        return $this->hasMany(PatchPanel::class);
+    }
 }
