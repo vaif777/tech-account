@@ -14,7 +14,7 @@ class TelecommunicationCabinetController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $telecommCabinets = TelecommunicationCabinet::all();
 
@@ -29,13 +29,26 @@ class TelecommunicationCabinetController extends Controller
     public function create(Request $request)
     {
         $buildings = Building::query()->select('id', 'name')->get();
-        $floors = Floor::query()->select('id', 'name')->get();
-        $rooms = Room::query()->select('id', 'name')->get();
+
+        if ($request->ajax()) {
+            
+            $res = [];
+
+            if ($request->building_id) {
+
+                $res['floors'] = Floor::query()->select('id', 'name')->where('building_id', $request->building_id)->get();
+            }
+
+            if ($request->floor_id) {
+
+                $res['rooms'] = Room::query()->select('id', 'name')->where('floor_id', $request->floor_id)->get();
+            }
+
+            return $res;
+        }
 
         return view('device_and_material.cabinet.create', [
             'buildings' => $buildings,
-            'floors' => $floors,
-            'rooms' => $rooms,
         ]);
     }
 
@@ -48,6 +61,9 @@ class TelecommunicationCabinetController extends Controller
             'name' => 'required|string|max:255',
             'manufacturer_id' => 'nullable|integer',
             'model_id' => 'nullable|integer',
+            'building_id' => 'required|integer',
+            'floor_id' => 'nullable|integer',
+            'room_id' => 'nullable|integer',
             'width' => 'nullable|integer',
             'height' => 'nullable|integer',
             'depth' => 'nullable|integer',

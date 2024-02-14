@@ -27,6 +27,8 @@
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
   <!-- iCheck for checkboxes and radio inputs -->
   <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <!-- Bootstrap4 Duallistbox -->
+  <link rel="stylesheet" href="{{ asset('plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css') }}">
   @routes
 </head>
 
@@ -146,48 +148,20 @@
                with font-awesome or any other icon font library -->
             @if (Auth()->user()->permissions->network_infrastructure)
             <li class="nav-item">
-              <a href="#" class="nav-link">
-                <p>
-                  Сетевая инфраструктура
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <a href="pages/calendar.html" class="nav-link">
-                  <p>
-                    Абоненты
-                    <!-- <span class="badge badge-info right">2</span> -->
-                  </p>
+            <a href="#" class="nav-link">
+              <p>
+              Сетевая инфраструктура
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('distribution.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Расприделение</p>
                 </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <p>
-                  Элементы
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="pages/mailbox/read-mail.html" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Патч панели</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('telecom-cabinet.create') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Телеком. шкафы</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="pages/mailbox/read-mail.html" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Коммутаторы</p>
-                  </a>
-                </li>
-              </ul>
-          </ul>
+              </li>
+            </ul>
           </li>
           @endif
 

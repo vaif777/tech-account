@@ -1,26 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\device_and_material;
+namespace App\Http\Controllers\network_infrastructure;
 
 use App\Http\Controllers\Controller;
 use App\Models\Building;
 use App\Models\Floor;
-use App\Models\PatchPanel;
 use App\Models\Room;
 use App\Models\TelecommunicationCabinet;
 use Illuminate\Http\Request;
 
-class PatchPanelController extends Controller
+class DistributionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $patchPanels = PatchPanel::query()->select()->get();
-
-        return view('device_and_material.patch_panel.index', [
-            'patchPanels' => $patchPanels,
+        //$materials = Material::query()->select()->get();
+        
+        return view('network_infrastructure.distribution.index', [
+            'telecommCabinets' => [],
         ]);
     }
 
@@ -65,11 +64,11 @@ class PatchPanelController extends Controller
             return $res;
         }
 
-        return view('device_and_material.patch_panel.create', [
+        return view('network_infrastructure.distribution.create', [
             'buildings' => $buildings,
             'floors' => $floors,
             'rooms' => $rooms,
-            'telecomCabinets' => $telecomCabinets,
+            'telecomCabinets' => $telecomCabinets
         ]);
     }
 
@@ -78,23 +77,7 @@ class PatchPanelController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'manufacturer_id' => 'nullable|integer',
-            'model_id' => 'nullable|integer',
-            'unit' => 'integer',
-            'count_port' => 'integer',
-        ]);
-
-        $patchPanel = PatchPanel::create($request->all());
-
-        for ($i = 1; $i <= $request->count_port; ++$i){
-            $patchPanel->PatchPanelPorts()->create([
-                'number' => $i,
-            ]);
-        }
-
-        return redirect()->route('patch-panel.create')->with('success', 'Запись добавленна');
+        //
     }
 
     /**

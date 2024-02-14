@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 id=test class="m-0">Телекомуникационный щкаф</h1>
+          <h1 id=test class="m-0">Расприделение</h1>
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -23,7 +23,7 @@
             <div class="row">
               <div class="card-body">
               @if (Auth()->user()->permissions->add)
-                <a href="{{ route('telecom-cabinet.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+                <a href="{{ route('distribution.create') }}" class="btn btn-success mb-3">+ Добавить</a>
                 @endif
                 <div class="table-responsive">
                   @if (count($telecommCabinets))
@@ -45,7 +45,7 @@
                     @foreach($telecommCabinets as $сabinet)
                       <tr>
                         <td><a href="{{ route('telecom-cabinet.show', ['telecom_cabinet' => $сabinet->id]) }}">{{ $сabinet->name }}</a></td>
-                        <td>{{ $сabinet->building->name }} {{ $сabinet->floor_id ? 'этаж '. $сabinet->floor->name : '' }} {{ $сabinet->room_id ? 'комната '. $сabinet->room->name : '' }}</td>
+                        <td>{{ $сabinet->building->name }} {{ $сabinet->floor->name ? 'этаж '. $сabinet->floor->name : '' }} {{ $сabinet->room->name ? 'комната '. $сabinet->room->name : '' }}</td>
                         <td>{{ $сabinet->width ? $сabinet->width : '' }}{{ $сabinet->height ? 'x'. $сabinet->height : '' }}{{ $сabinet->depth ? 'x'. $сabinet->depth : '' }} {{ $сabinet->unit ? ' '.$сabinet->unit .'U' : '' }}</td>
                         <td>{{ $сabinet->patchPanelNames() }}</td>
                         <td></td>

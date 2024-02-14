@@ -7,6 +7,7 @@ use App\Http\Controllers\device_and_material\PatchPanelController;
 use App\Http\Controllers\facilities\FloorController;
 use App\Http\Controllers\facilities\RoomController;
 use App\Http\Controllers\facilities\BuildingController;
+use App\Http\Controllers\network_infrastructure\DistributionController;
 use App\Http\Controllers\reference\MaterialsReferenceController;
 use App\Http\Controllers\settings\SettingController;
 use App\Http\Controllers\device_and_material\TelecommunicationCabinetController;
@@ -54,7 +55,7 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
 
     Route::group(['prefix' => 'network-infrastructure'], function(){
         
-        
+        Route::resource('/distribution', DistributionController::class);
     });
 
     Route::group(['prefix' => 'facilities'], function(){
