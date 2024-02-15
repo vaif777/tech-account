@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class PatchPanel extends Model
 {
@@ -19,23 +20,48 @@ class PatchPanel extends Model
     ];
 
     public function telecommunication_cabinet(){
+
         return $this->belongsTo(TelecommunicationCabinet::class);
     }
     
     public function building(){
+
         return $this->belongsTo(Building::class);
     }
 
+    public function location(): MorphOne
+    {
+        return $this->morphOne(Location::class, 'locatable');
+    }
+
     public function floorName(){
-        return $this->telecommunication_cabinet->floor->name;
+
+        if ($this->telecommunication_cabinet->floor_id)
+            return $this->telecommunication_cabinet->floor->name;
     }
 
     public function roomName(){
-        return $this->telecommunication_cabinet->room->name;
+
+        if ($this->telecommunication_cabinet->room_id)
+            return $this->telecommunication_cabinet->room->name;
     }
 
-    public function PatchPanelPorts (){
+    public function patchPanelPorts (){
+
         return $this->hasMany(PatchPanelPort::class);
+    }
+
+    static public function filterPatchPanel($arguments){
+
+        $telecomCabinets = TelecommunicationCabinet::query()->select()->where($arguments)->get();
+        $res = [];
+
+       foreach($telecomCabinets as $cabinet) {
+        
+            $cabinet->patchPanels()->select('id', 'name')->first() ? $res[] = $cabinet->patchPanels()->select('id', 'name')->first() : '' ;
+       }
+
+       return collect($res);
     }
     
 }

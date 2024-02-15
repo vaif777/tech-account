@@ -44,7 +44,7 @@
                     @foreach($patchPanels as $panel)
                       <tr>
                         <td><a href="{{ route('patch-panel.show', ['patch_panel' => $panel->id]) }}">{{ $panel->name }}</a></td>
-                        <td>{{  $panel->telecommunication_cabinet->name }}</td>
+                        <td>{{  $panel->telecommunication_cabinet_id ? $panel->telecommunication_cabinet->name : '' }}</td>
                         <td>{{ $panel->building->name }} {{  $panel->floorName() ? 'этаж '.$panel->floorName() : '' }} {{  $panel->roomName() ? 'комната '.$panel->roomName() : '' }}</td>
                         <td>{{  $panel->count_port }} {{  $panel->unit ? ' '. $panel->unit .'U' : '' }}</td>
                         @if (Auth()->user()->permissions->edit or

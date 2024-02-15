@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('distributions', function (Blueprint $table) {
             $table->id();
+            $table->integer('patch_panel_id')->nullable();
+            $table->integer('patch_panel_port_id')->nullable();
             $table->timestamps();
         });
     }
