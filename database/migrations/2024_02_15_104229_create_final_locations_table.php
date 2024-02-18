@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('room_id')->nullable();
             $table->integer('telecommunication_cabinet_id')->nullable();
             $table->unsignedBigInteger('final_locatable_id');
-            $table->string('commentable_type');
+            $table->string('locatable_type');
             $table->timestamps();
         });
     }

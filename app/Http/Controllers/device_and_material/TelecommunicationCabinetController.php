@@ -70,7 +70,9 @@ class TelecommunicationCabinetController extends Controller
             'unit' => 'nullable|integer',
         ]);
 
-        TelecommunicationCabinet::create($request->all());
+        $cabinet = TelecommunicationCabinet::create($request->all());
+
+        $cabinet->location()->create($request->all());
 
         return redirect()->route('telecom-cabinet.create')->with('success', 'Запись добавленна');
     }

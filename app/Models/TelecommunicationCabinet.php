@@ -23,30 +23,15 @@ class TelecommunicationCabinet extends Model
         'name',
     ];
 
-    public function building(){
-        return $this->belongsTo(Building::class);
-    }
-
-    public function floor(){
-        return $this->belongsTo(Floor::class);
-    }
-
-    public function room(){
-        return $this->belongsTo(Room::class);
-    }
-
     public function location(): MorphOne
     {
         return $this->morphOne(Location::class, 'locatable');
     }
 
-    public function patchPanels (){
-        return $this->hasMany(PatchPanel::class);
-    }
-
-    public function patchPanelNames (){
+    public function patchPanelsName (){
         
-        return implode(", ", $this->patchPanels()->select('name')->pluck('name')->toArray());
-    }
-    
+        $patchPanelIdArray = Location::query()->select()->where(['telecommunication_cabinet_id' => $this->id, 'locatable_type' => 'App\Models\PatchPanel'])->pluck('locatable_id')->toArray();
+
+        return implode(', ', PatchPanel::query()->select()->whereIn('id',  $patchPanelIdArray)->pluck('name')->toArray());
+    }   
 }

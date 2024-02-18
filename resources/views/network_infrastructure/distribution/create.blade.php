@@ -19,15 +19,20 @@
       <div class="card card-default">
         <div class="card-header">
           <h3 class="card-title">Форма добовление</h3>
-          <small class="float-right"><a href="{{ route('telecom-cabinet.index') }}"
+          <small class="float-right"><a href="{{ route('distribution.index') }}"
               class="btn btn-block btn-outline-dark">Назад
             </a></small>
         </div>
         <!-- /.card-header -->
-        <form method="post" action="{{ route('telecom-cabinet.store') }}">
+        <form method="post" action="{{ route('distribution.store') }}">
           @csrf
           <div class="card-body">
             <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                  <h4>Выберите начальную точку *</h4>
+                </div>
+              </div>
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Здание *</label>
@@ -81,23 +86,22 @@
               <div class="col-12">
                 <div class="form-group">
                   <label>Выберите порты</label>
-                  <select id="patchPanelPorts" class="duallistbox" name="port_id" multiple="multiple">
-                    <option value="" >Выберите патч панель</option>
+                  <select id="patchPanelPorts" class="duallistbox" name="patch_panel_port" multiple="multiple">
+                    <option value="">Выберите патч панель</option>
                   </select>
                 </div>
-                <!-- /.form-group -->
               </div>
               <!-- /.col -->
               <div class="col-md-12">
                 <div class="form-group">
-                  <label>Выберите конечное расположение *</label>
+                  <h4>Выберите конечное точку *</h4>
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Здание *</label>
-                  <select id="final_buildings" class="form-control select2" name="building_id" style="width: 100%;">
-                    <option selected>Выберите здания</option>
+                  <select id="finalBuildings" class="form-control select2" name="final_building_id" style="width: 100%;">
+                    <option value="" selected>Выберите здания</option>
                     @foreach ($buildings as $building)
                     <option value="{{ $building->id }}">{{ $building->name }}</option>
                     @endforeach
@@ -107,16 +111,49 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Этаж</label>
-                  <select id="final_floors" class="form-control select2" name="floor_id" style="width: 100%;">
-                    <option value="1">Комната</option>
+                  <select id="finalFloors" class="form-control select2" name="final_floor_id" style="width: 100%;" disabled>
+                    <option value="" selected>Нужно выбрать здание</option>
                   </select>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Комната</label>
-                  <select class="form-control select2" name="room_id" style="width: 100%;">
-                    <option value="1">тест</option>
+                  <select id="finalRooms" class="form-control select2" name="final_room_id" style="width: 100%;" disabled>
+                    <option value="" selected>Нужно выбрать этаж</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Телеком шкаф</label>
+                  <select id="finalTelecomCabinets" class="form-control select2" name="final_telecommunication_cabinet_id"
+                    style="width: 100%;">
+                    <option value="" selected>Выберите шкаф</option>
+                    @foreach ($telecomCabinets as $cabinet)
+                    <option value="{{ $cabinet->id }}">{{ $cabinet->name }}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Патч панель</label>
+                  <select id="finalPatchPanels" class="form-control select2" name="final_patch_panel_id" style="width: 100%;">
+                    <option value="" selected>Выберите патч панель</option>
+                    @foreach ($patchPanels as $panel)
+                    <option value="{{ $panel->id }}">{{ $panel->name }}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label>Выберите порты</label>
+                  <select id="finalPatchPanelPorts" class="duallistbox" name="final_patch_panel_port" multiple="multiple">
+                    <option value="">Выберите патч панель</option>
                   </select>
                 </div>
               </div>
@@ -143,8 +180,10 @@
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- Bootstrap4 Duallistbox -->
 <script src="{{ asset('plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
-<!-- filter_building_floor_room -->
-<script src="{{ asset('app/filters/telecom-cabinet/filter_building_floor_room.js') }}"></script>
+<!-- filter_network_infrastructure -->
+<script src="{{ asset('app/filters/network_infrastructure/filter_network_infrastructure.js') }}"></script>
+<!-- filter_final_network_infrastructure -->
+<script src="{{ asset('app/filters/network_infrastructure/filter_final_network_infrastructure.js') }}"></script>
 <script>
 
   //Bootstrap Duallistbox

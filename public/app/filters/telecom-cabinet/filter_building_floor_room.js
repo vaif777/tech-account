@@ -3,11 +3,11 @@ let selectTelecomCabinets = document.getElementById('telecomCabinets');
 let selectFloors = document.getElementById('floors');
 let selectRooms = document.getElementById('rooms');
 let selectPatchPanels = document.getElementById('patchPanels');
-let selectFinalBuildings = document.getElementById('final_buildings'); 
-let selectPorts = document.getElementById('patchPanelPorts'); 
+let selectPorts = document.getElementById('patchPanelPorts');
 let route = document.getElementById('route').value;
 
-function optionAdd (disabled, optionsDelete, selected, select, title, id = '') {
+
+function optionAdd(disabled, optionsDelete, selected, select, title, id = '') {
 
   select.disabled = disabled;
   optionsDelete ? select.options.length = 0 : '';
@@ -25,7 +25,10 @@ $(document).ready(function () {
     $.ajax({
       method: "GET",
       url: route,
-      data: { building_id: selectBuildings.value },
+      data: { 
+        building_id: selectBuildings.value,
+        filter: true
+      },
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
@@ -36,66 +39,66 @@ $(document).ready(function () {
         let telecomCabinets = data['telecomCabinets'];
         let patchPanels = data['patchPanels'];
 
-        optionAdd (false, true, true, selectFloors, 'Выберите этаж')
+        optionAdd(false, true, true, selectFloors, 'Выберите этаж')
 
         for (let key in floors) {
 
-          optionAdd (false, false, false, selectFloors, floors[key]['name'], floors[key]['id'])
+          optionAdd(false, false, false, selectFloors, floors[key]['name'], floors[key]['id'])
         }
 
         if (telecomCabinets) {
-          
-          optionAdd (false, true, true, selectTelecomCabinets, 'Выберите шкаф');
+
+          optionAdd(false, true, true, selectTelecomCabinets, 'Выберите шкаф');
 
           for (let key in telecomCabinets) {
 
-            optionAdd (false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
+            optionAdd(false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
           }
 
         }
 
         if (patchPanels) {
-          
-          optionAdd (false, true, true, selectPatchPanels, 'Выберите патч панель');
+
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
 
           for (let key in patchPanels) {
 
-            optionAdd (false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+            optionAdd(false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
           }
 
         }
 
         if (!selectBuildings.value) {
 
-          optionAdd (true, true, true, selectFloors, 'Нужно выбрать здание');
-          optionAdd (true, true, true, selectRooms, 'Нужно выбрать этаж');
-          optionAdd (false, true, true, selectTelecomCabinets, 'Выберите шкаф');
+          optionAdd(true, true, true, selectFloors, 'Нужно выбрать здание');
+          optionAdd(true, true, true, selectRooms, 'Нужно выбрать этаж');
+          optionAdd(false, true, true, selectTelecomCabinets, 'Выберите шкаф');
 
           for (let key in telecomCabinets) {
 
-            optionAdd (false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
+            optionAdd(false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
           }
-          
-          optionAdd (false, true, true, selectPatchPanels, 'Выберите патч панель');
-  
+
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
+
           for (let key in patchPanels) {
-  
-            optionAdd (false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+
+            optionAdd(false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
           }
-  
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
         if (!selectPatchPanels.value) {
 
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
         if (!selectFloors.value) {
 
-          optionAdd (true, true, true, selectRooms, 'Нужно выбрать этаж');
+          optionAdd(true, true, true, selectRooms, 'Нужно выбрать этаж');
         }
 
       });
@@ -109,9 +112,10 @@ $(document).ready(function () {
     $.ajax({
       method: "GET",
       url: route,
-      data: { 
+      data: {
         building_id: selectBuildings.value,
-        floor_id: selectFloors.value 
+        floor_id: selectFloors.value,
+        filter: true
       },
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -122,60 +126,60 @@ $(document).ready(function () {
         let rooms = data['rooms'];
         let telecomCabinets = data['telecomCabinets'];
         let patchPanels = data['patchPanels'];
-        
-        optionAdd (false, true, true, selectRooms, 'Выберите комнату');
+
+        optionAdd(false, true, true, selectRooms, 'Выберите комнату');
 
         for (let key in rooms) {
 
-          optionAdd (false, false, false, selectRooms, rooms[key]['name'], rooms[key]['id']);
+          optionAdd(false, false, false, selectRooms, rooms[key]['name'], rooms[key]['id']);
         }
 
         if (telecomCabinets) {
 
-          optionAdd (false, true, true, selectTelecomCabinets, 'Выберите шкаф');
+          optionAdd(false, true, true, selectTelecomCabinets, 'Выберите шкаф');
 
           for (let key in telecomCabinets) {
 
-            optionAdd (false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
+            optionAdd(false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
           }
 
         }
 
         if (patchPanels) {
-          
-          optionAdd (false, true, true, selectPatchPanels, 'Выберите патч панель');
+
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
 
           for (let key in patchPanels) {
 
-            optionAdd (false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+            optionAdd(false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
           }
 
         }
 
         if (!selectFloors.value) {
 
-          optionAdd (true, true, true, selectRooms, 'Нужно выбрать этаж');
-          optionAdd (false, true, true, selectTelecomCabinets, 'Выберите шкаф');
+          optionAdd(true, true, true, selectRooms, 'Нужно выбрать этаж');
+          optionAdd(false, true, true, selectTelecomCabinets, 'Выберите шкаф');
 
           for (let key in telecomCabinets) {
 
-            optionAdd (false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
-          }
-          
-          optionAdd (false, true, true, selectPatchPanels, 'Выберите патч панель');
-    
-          for (let key in patchPanels) {
-    
-            optionAdd (false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+            optionAdd(false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
           }
 
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
+
+          for (let key in patchPanels) {
+
+            optionAdd(false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+          }
+
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
         if (!selectPatchPanels.value) {
 
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
@@ -190,10 +194,11 @@ $(document).ready(function () {
     $.ajax({
       method: "GET",
       url: route,
-      data: { 
+      data: {
         building_id: selectBuildings.value,
         floor_id: selectFloors.value,
-        room_id: selectRooms.value 
+        room_id: selectRooms.value,
+        filter: true
       },
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -206,49 +211,49 @@ $(document).ready(function () {
 
         if (telecomCabinets) {
 
-          optionAdd (false, true, true, selectTelecomCabinets, 'Выберите шкаф');
+          optionAdd(false, true, true, selectTelecomCabinets, 'Выберите шкаф');
 
           for (let key in telecomCabinets) {
 
-            optionAdd (false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
+            optionAdd(false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
           }
 
         }
 
         if (patchPanels) {
-          
-          optionAdd (false, true, true, selectPatchPanels, 'Выберите патч панель');
+
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
 
           for (let key in patchPanels) {
 
-            optionAdd (false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+            optionAdd(false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
           }
 
         }
 
         if (!selectRooms.value) {
 
-          optionAdd (false, true, true, selectTelecomCabinets, 'Выберите шкаф');
+          optionAdd(false, true, true, selectTelecomCabinets, 'Выберите шкаф');
 
           for (let key in telecomCabinets) {
 
-            optionAdd (false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
+            optionAdd(false, false, false, selectTelecomCabinets, telecomCabinets[key]['name'], telecomCabinets[key]['id']);
           }
 
-          optionAdd (false, true, true, selectPatchPanels, 'Выберите патч панель');
-  
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
+
           for (let key in patchPanels) {
-  
-            optionAdd (false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+
+            optionAdd(false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
           }
 
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
         if (!selectPatchPanels.value) {
 
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
       });
@@ -262,11 +267,12 @@ $(document).ready(function () {
     $.ajax({
       method: "GET",
       url: route,
-      data: { 
+      data: {
         building_id: selectBuildings.value,
         floor_id: selectFloors.value,
         room_id: selectRooms.value,
-        telecommunication_cabinet_id: selectTelecomCabinets.value 
+        telecommunication_cabinet_id: selectTelecomCabinets.value,
+        cabinetPatch: true
       },
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -275,91 +281,100 @@ $(document).ready(function () {
       .done(function (data) {
 
         let patchPanels = data['patchPanels'];
-        let facilityId = data['facilityId'];
-        let buildings = data['buildings'];
+        let locations = data['locations'];
         let floors = data['floors'];
         let rooms = data['rooms'];
+        let patchPanelsAll = data['patchPanelsAll'];
+        let telecomCabinetsAll = data['telecomCabinetsAll'];
 
+        console.log(patchPanels);
         if (patchPanels) {
-        
-          optionAdd (false, true, true, selectPatchPanels, 'Выберите патч панель');
-  
+
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
+
           for (let key in patchPanels) {
-  
-            optionAdd (false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+
+            optionAdd(false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
           }
-  
+
         }
 
-        optionAdd (false, true, false, selectBuildings, 'Выберите здание');
-  
-        for (let key in buildings) {
+      if (locations) {
 
-          if (buildings[key]['id'] == facilityId['building_id']){
+        let serchOption = selectBuildings.querySelector("option[value='" + locations['building_id'] + "']");
+        serchOption.selected = "selected";
+        selectBuildings.appendChild(serchOption);
 
-            optionAdd (false, false, true, selectBuildings, buildings[key]['name'], buildings[key]['id']);
-            continue;
-          } 
-  
-          optionAdd (false, false, false, selectBuildings, buildings[key]['name'], buildings[key]['id']);
-        }
+        if (locations['floor_id'] ) {
 
-        if (facilityId['floor_id']) {
+          optionAdd(false, true, false, selectFloors, 'Выберите этаж');
 
-          optionAdd (false, true, false, selectFloors, 'Выберите этаж');
-  
-        for (let key in floors) {
+          for (let key in floors) {
 
-          if (floors[key]['id'] == facilityId['floor_id']){
+            if (floors[key]['id'] == locations['floor_id']) {
 
-            optionAdd (false, false, true, selectFloors, floors[key]['name'], floors[key]['id']);
-            continue;
-          } 
-  
-          optionAdd (false, false, false, selectFloors, floors[key]['name'], floors[key]['id']);
-        }
+              optionAdd(false, false, true, selectFloors, floors[key]['name'], floors[key]['id']);
+              continue;
+            }
+
+            optionAdd(false, false, false, selectFloors, floors[key]['name'], floors[key]['id']);
+          }
         } else {
 
-          optionAdd (true, true, true, selectFloors, 'Этаж не задан');
+          optionAdd(true, true, true, selectFloors, 'Этаж не задан');
         }
 
-        if (facilityId['room_id']) {
+        if (locations['room_id']) {
 
-          optionAdd (false, true, false, selectRooms, 'Выберите комнату');
-  
-        for (let key in rooms) {
+          optionAdd(false, true, false, selectRooms, 'Выберите комнату');
 
-          if (rooms[key]['id'] == facilityId['room_id']){
+          for (let key in rooms) {
 
-            optionAdd (false, false, true, selectRooms, rooms[key]['name'], rooms[key]['id']);
-            continue;
-          } 
-  
-          optionAdd (false, false, false, selectRooms, rooms[key]['name'], rooms[key]['id']);
-        }
+            if (rooms[key]['id'] == locations['room_id']) {
+
+              optionAdd(false, false, true, selectRooms, rooms[key]['name'], rooms[key]['id']);
+              continue;
+            }
+
+            optionAdd(false, false, false, selectRooms, rooms[key]['name'], rooms[key]['id']);
+          }
         } else {
 
-          optionAdd (true, true, true, selectRooms, 'Комната не задана');
+          optionAdd(true, true, true, selectRooms, 'Комната не задана');
         }
 
-
+      }
 
         if (!selectTelecomCabinets.value) {
- 
-          optionAdd (false, true, true, selectPatchPanels, 'Выберите патч панель');
-                  
-          for (let key in patchPanels) {
-          
-            optionAdd (false, false, false, selectPatchPanels, patchPanels[key]['name'], patchPanels[key]['id']);
+
+          optionAdd(true, true, true, selectFloors, 'Нужно выбрать здание');
+          optionAdd(true, true, true, selectRooms, 'Нужно выбрать этаж');
+
+          let serchOption = selectBuildings.querySelector("option[value='" +''+ "']");
+          serchOption.selected = "selected";
+          selectBuildings.insertBefore(serchOption, selectBuildings.firstChild);
+
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
+
+          for (let key in patchPanelsAll) {
+
+            optionAdd(false, false, false, selectPatchPanels, patchPanelsAll[key]['name'], patchPanelsAll[key]['id']);
           }
-        
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+
+          optionAdd(false, true, true, selectTelecomCabinets, 'Выберите шкаф');
+
+          for (let key in telecomCabinetsAll) {
+
+            optionAdd(false, false, false, selectTelecomCabinets, telecomCabinetsAll[key]['name'], telecomCabinetsAll[key]['id']);
+          }
+
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
         if (!selectPatchPanels.value) {
 
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
@@ -374,7 +389,7 @@ $(document).ready(function () {
     $.ajax({
       method: "GET",
       url: route,
-      data: { 
+      data: {
         patch_panel_id: selectPatchPanels.value
       },
       headers: {
@@ -383,19 +398,101 @@ $(document).ready(function () {
     })
       .done(function (data) {
 
+        let locations = data['locations'];
+        let floors = data['floors'];
+        let rooms = data['rooms'];
         let ports = data['ports'];
+        let telecomCabinet = data['telecomCabinet'];
+        let telecomCabinetsAll = data['telecomCabinetsAll'];
+        let patchPanelsAll = data['patchPanelsAll'];
         selectPorts.options.length = 0
+
+        if (locations) {
+
+          let serchOption = selectBuildings.querySelector("option[value='" + locations['building_id'] + "']");
+          serchOption.selected = "selected";
+          selectBuildings.appendChild(serchOption);
+  
+          if (locations['floor_id']) {
+  
+            optionAdd(false, true, false, selectFloors, 'Выберите этаж');
+  
+            for (let key in floors) {
+  
+              if (floors[key]['id'] == locations['floor_id']) {
+  
+                optionAdd(false, false, true, selectFloors, floors[key]['name'], floors[key]['id']);
+                continue;
+              }
+  
+              optionAdd(false, false, false, selectFloors, floors[key]['name'], floors[key]['id']);
+            }
+          } else {
+  
+            optionAdd(true, true, true, selectFloors, 'Этаж не задан');
+          }
+  
+          if (locations['room_id']) {
+  
+            optionAdd(false, true, false, selectRooms, 'Выберите комнату');
+  
+            for (let key in rooms) {
+  
+              if (rooms[key]['id'] == locations['room_id']) {
+  
+                optionAdd(false, false, true, selectRooms, rooms[key]['name'], rooms[key]['id']);
+                continue;
+              }
+  
+              optionAdd(false, false, false, selectRooms, rooms[key]['name'], rooms[key]['id']);
+            }
+          } else {
+  
+            optionAdd(true, true, true, selectRooms, 'Комната не задана');
+          }
+
+          if (locations['telecommunication_cabinet_id']) {
+  
+            optionAdd(false, true, false, selectTelecomCabinets, 'Выберите шкаф');
+            optionAdd(false, false, true, selectTelecomCabinets, telecomCabinet['name'], telecomCabinet['id']);     
+          } else {
+  
+            optionAdd(true, true, true, selectTelecomCabinets, 'Шкаф не задана');
+          }
+
+        }
 
         for (let key in ports) {
 
-          optionAdd (false, false, false, selectPorts, ports[key]['number'], ports[key]['id']);
+          optionAdd(false, false, false, selectPorts, ports[key], ports[key]);
         }
 
         $(selectPorts).bootstrapDualListbox('refresh', true);
 
         if (!selectPatchPanels.value) {
-          
-          optionAdd (false, true, false, selectPorts, 'Выберите патч панель');
+
+          optionAdd(true, true, true, selectFloors, 'Нужно выбрать здание');
+          optionAdd(true, true, true, selectRooms, 'Нужно выбрать этаж');
+
+          let serchOption = selectBuildings.querySelector("option[value='" +''+ "']");
+          serchOption.selected = "selected";
+          selectBuildings.insertBefore(serchOption, selectBuildings.firstChild);
+
+          optionAdd(false, true, true, selectTelecomCabinets, 'Выберите шкаф');
+
+          for (let key in telecomCabinetsAll) {
+
+            optionAdd(false, false, false, selectTelecomCabinets, telecomCabinetsAll[key]['name'], telecomCabinetsAll[key]['id']);
+          }
+
+          optionAdd(false, true, true, selectPatchPanels, 'Выберите патч панель');
+
+          for (let key in patchPanelsAll) {
+
+            optionAdd(false, false, false, selectPatchPanels, patchPanelsAll[key]['name'], patchPanelsAll[key]['id']);
+          }
+
+          optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 

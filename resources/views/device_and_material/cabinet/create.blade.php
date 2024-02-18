@@ -209,6 +209,8 @@
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- filter_building_floor_room -->
 <script src="{{ asset('app/filters/telecom-cabinet/filter_building_floor_room.js') }}"></script>
+<!-- filter_network_infrastructure -->
+<script src="{{ asset('app/filters/network_infrastructure/filter_network_infrastructure.js') }}"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements

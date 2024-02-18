@@ -19,6 +19,9 @@
       <div class="card card-default">
         <div class="card-header">
           <h3 class="card-title">Форма добовление</h3>
+          <small class="float-right"><a href="{{ route('patch-panel.index') }}"
+              class="btn btn-block btn-outline-dark">Назад
+            </a></small>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -202,7 +205,7 @@
 <!-- Select2 -->
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- filter_building_floor_room -->
-<script src="{{ asset('app/filters/telecom-cabinet/filter_building_floor_room.js') }}"></script>
+<script src="{{ asset('app/filters/network_infrastructure/filter_network_infrastructure.js') }}"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\device_and_material;
 use App\Http\Controllers\Controller;
 use App\Models\Building;
 use App\Models\Floor;
+use App\Models\Location;
 use App\Models\PatchPanel;
 use App\Models\Room;
 use App\Models\TelecommunicationCabinet;
@@ -30,8 +31,8 @@ class PatchPanelController extends Controller
     public function create(Request $request)
     {
         $buildings = Building::query()->select('id', 'name')->get();
-        $floors = Floor::query()->select('id', 'name')->get();
-        $rooms = Room::query()->select('id', 'name')->get();
+        $floors = Floor::query()->select('id', 'name', 'building_id')->get();
+        $rooms = Room::query()->select('id', 'name', 'floor_id')->get();
         $telecomCabinets = TelecommunicationCabinet::query()->select('id', 'name')->get();
 
         if ($request->ajax()) {
@@ -39,29 +40,39 @@ class PatchPanelController extends Controller
             $res = [];
 
             if ($request->building_id) {
-
-                $res['floors'] = Floor::query()->select('id', 'name')->where('building_id', $request->building_id)->get(); 
+                
+                $res['floors'] = $floors->where('building_id', $request->building_id); 
             }
 
             if ($request->floor_id) {
 
-                $res['rooms'] = Room::query()->select('id', 'name')->where('floor_id', $request->floor_id)->get();
+                $res['rooms'] = $rooms->where('floor_id', $request->floor_id);
             }
 
-            if ($request->floor_id or $request->building_id or $request->room_id) {
+            if ($request->filter and ($request->floor_id or $request->building_id or $request->room_id or $request->telecommunication_cabinet_id)) {
 
                 $arguments = [];
 
                 $request->floor_id ? $arguments['floor_id'] = $request->floor_id : '';
                 $request->building_id ? $arguments['building_id'] = $request->building_id : '';
                 $request->room_id ? $arguments['room_id'] = $request->room_id : '';
+                $request->telecommunication_cabinet_id ? $arguments['telecommunication_cabinet_id'] = $request->telecommunication_cabinet_id : '';
 
-                $res['telecomCabinets'] = TelecommunicationCabinet::query()->select('id', 'name')->where($arguments)->get();
+                $res['telecomCabinets'] = $telecomCabinets->whereIn('id', Location::searchIdArray($arguments, 'App\Models\TelecommunicationCabinet'));
             } else {
 
-                $res['telecomCabinets'] = TelecommunicationCabinet::query()->select('id', 'name')->get();
+                $res['telecomCabinets'] = $telecomCabinets;
+            }
+
+            if ($request->telecommunication_cabinet_id) {
+
+                $res['locations'] = $telecomCabinets->find($request->telecommunication_cabinet_id)->location;
+                $res['locations']->floor_id ? $res['floors'] = $floors->where('building_id', $res['locations']->building_id) : '';
+                $res['locations']->room_id ?  $res['rooms'] = $rooms->where('floor_id', $res['locations']->floor_id) : '';
+                
             }
              
+            $res['telecomCabinetsAll'] = $telecomCabinets;
             return $res;
         }
 
@@ -88,11 +99,7 @@ class PatchPanelController extends Controller
 
         $patchPanel = PatchPanel::create($request->all());
 
-        for ($i = 1; $i <= $request->count_port; ++$i){
-            $patchPanel->PatchPanelPorts()->create([
-                'number' => $i,
-            ]);
-        }
+        $patchPanel->Location()->create($request->all());
 
         return redirect()->route('patch-panel.create')->with('success', 'Запись добавленна');
     }
