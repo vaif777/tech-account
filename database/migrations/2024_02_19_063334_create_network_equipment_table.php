@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patch_panels', function (Blueprint $table) {
-            $table->id(); 
+        Schema::create('network_equipment', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
             $table->integer('manufacturer_id')->nullable();
             $table->integer('model_id')->nullable();
+            $table->integer('storeroom_accounting_id')->nullable();
+            $table->integer('IP_address')->nullable();
+            $table->integer('MAC_address')->nullable();
             $table->integer('count_port');
-            $table->integer('unit');
-            $table->string('name');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patch_panels');
+        Schema::dropIfExists('network_equipment');
     }
 };

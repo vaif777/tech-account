@@ -28,10 +28,17 @@ class TelecommunicationCabinet extends Model
         return $this->morphOne(Location::class, 'locatable');
     }
 
-    public function patchPanelsName (){
+    public function patchPanelsNames (){
         
         $patchPanelIdArray = Location::query()->select()->where(['telecommunication_cabinet_id' => $this->id, 'locatable_type' => 'App\Models\PatchPanel'])->pluck('locatable_id')->toArray();
 
         return implode(', ', PatchPanel::query()->select()->whereIn('id',  $patchPanelIdArray)->pluck('name')->toArray());
+    }
+
+    public function networkEquipmentNames (){
+        
+        $networkEquipmentIdArray = Location::query()->select()->where(['telecommunication_cabinet_id' => $this->id, 'locatable_type' => 'App\Models\NetworkEquipment'])->pluck('locatable_id')->toArray();
+
+        return implode(', ', NetworkEquipment::query()->select()->whereIn('id',  $networkEquipmentIdArray)->pluck('name')->toArray());
     }   
 }

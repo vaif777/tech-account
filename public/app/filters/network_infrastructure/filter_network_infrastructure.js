@@ -177,7 +177,7 @@ $(document).ready(function () {
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
-        if (!selectPatchPanels.value) {
+        if (selectPatchPanels && !selectPatchPanels.value) {
 
           optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);
@@ -251,7 +251,7 @@ $(document).ready(function () {
           $(selectPorts).bootstrapDualListbox('refresh', true);
         }
 
-        if (!selectPatchPanels.value) {
+        if (selectPatchPanels && !selectPatchPanels.value) {
 
           optionAdd(false, true, false, selectPorts, 'Выберите патч панель');
           $(selectPorts).bootstrapDualListbox('refresh', true);

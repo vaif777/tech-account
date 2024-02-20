@@ -4,7 +4,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 id=test class="m-0">Телекомуникационный щкаф</h1>
+        <h1 id=test class="m-0">Патч панель</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -23,49 +23,63 @@
           <div class="row">
             <div class="card-body">
               @if (Auth()->user()->permissions->add)
-              <a href="{{ route('telecom-cabinet.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+              <a href="{{ route('network-equipment.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+              <a href="{{ route('network-equipment.create') }}" class="btn btn-success mb-3">+ Добавить по шаблону</a>
+              <a href="{{ route('network-equipment.create') }}" class="btn btn-success mb-3">+ Добавить со склада</a>
               @endif
               <div class="table-responsive">
-                @if (count($telecommCabinets))
+                @if (count($networkEquipments))
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>Наименование</th>
+                      <th>Телеком шкаф</th>
                       <th>Расположение</th>
-                      <th>Размеры</th>
-                      <th>Патч панели</th>
-                      <th>Сетивое оборудование</th>
+                      <th>Количество портов и U</th>
                       @if (Auth()->user()->permissions->edit or
-                      Auth()->user()->permissions->delete)
+                      Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <th>дествие</th>
                       @endif
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($telecommCabinets as $сabinet)
+                    @foreach($networkEquipments as $networkEquipment)
                     <tr>
-                      <td><a href="{{ route('telecom-cabinet.show', ['telecom_cabinet' => $сabinet->id]) }}">{{
-                          $сabinet->name }}</a></td>
-                      <td>{{ $сabinet->location->building->name }} {{ $сabinet->location->floor_id ? 'этаж '.
-                        $сabinet->location->floor->name : '' }} {{ $сabinet->location->room_id ? 'комната '.
-                        $сabinet->location->room->name : '' }}</td>
-                      <td>{{ $сabinet->width ? $сabinet->width : '' }}{{ $сabinet->height ? 'x'. $сabinet->height : ''
-                        }}{{ $сabinet->depth ? 'x'. $сabinet->depth : '' }} {{ $сabinet->unit ? ' '.$сabinet->unit .'U'
-                        : '' }}</td>
-                      <td>{{ $сabinet->patchPanelsNames() ? $сabinet->patchPanelsNames() : 'Отсутствует' }}</td>
-                      <td>{{ $сabinet->networkEquipmentNames() ? $сabinet->networkEquipmentNames() : 'Отсутствует' }}</td>
+                      <td><a
+                          href="{{ route('network-equipment.show', ['network_equipment' => $networkEquipment->id]) }}">{{
+                          $networkEquipment->name
+                          }}</a>@if ($networkEquipment->pattern) <span class="float-right badge bg-success">Шаблон</span> @endif</td>
+                      <td>{{ $networkEquipment->location->telecommunication_cabinet_id ?
+                        $networkEquipment->location->telecommunicationCabinet->name : '' }}</td>
+                      <td>{{ $networkEquipment->location->building->name }} {{ $networkEquipment->location->floor_id ?
+                        'этаж '.$networkEquipment->location->floor->name : '' }} {{
+                        $networkEquipment->location->room_id ? 'комната '.$networkEquipment->location->room->name : ''
+                        }}</td>
+                      <td>{{ $networkEquipment->count_port }} {{ $networkEquipment->unit ? ' '. $networkEquipment->unit
+                        .'U' : '' }}</td>
                       @if (Auth()->user()->permissions->edit or
-                      Auth()->user()->permissions->delete)
-                      <td>
+                      Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
+                      <td id="action">
+                        @if ($networkEquipment->pattern)
+                        @if (Auth()->user()->permissions->delete)
+                        <button id="pattern" type="button" value="{{ $networkEquipment->id }}" class="btn btn-outline-danger btn-sm float-left mr-1">Удалить шаблон</button>
+                        @endif
+                        @else
+                        @if (Auth()->user()->permissions->add)
+                        <button id="pattern" type="button" value="{{ $networkEquipment->id }}"
+                          class="btn btn-outline-success btn-sm float-left mr-1">Сохранить как шаблон</button>
+                        @endif
+                        @endif
                         @if (Auth()->user()->permissions->edit)
-                        <a href="{{ route('telecom-cabinet.edit', ['telecom_cabinet' =>  $сabinet->id]) }}"
+                        <a href="{{ route('network-equipment.edit', ['network_equipment' =>  $networkEquipment->id]) }}"
                           class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
                         @endif
 
                         @if (Auth()->user()->permissions->delete)
-                        <form action="{{ route('telecom-cabinet.destroy', ['telecom_cabinet' =>  $сabinet->id]) }}"
+                        <form
+                          action="{{ route('network-equipment.destroy', ['network_equipment' => $networkEquipment->id]) }}"
                           method="post" class="float-left">
                           @csrf
                           @method('DELETE')
@@ -83,10 +97,9 @@
                   <tfoot>
                     <tr>
                       <th>Наименование</th>
+                      <th>Телеком шкаф</th>
                       <th>Расположение</th>
-                      <th>Размеры</th>
-                      <th>Патч панели</th>
-                      <th>Сетивое оборудование</th>
+                      <th>Количество портов и U</th>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete)
                       <th>дествие</th>
@@ -143,6 +156,36 @@
       "responsive": true,
     });
   });
+
+  let buttonPattern = document.getElementById('pattern');
+  let tdAction = document.getElementById('action');
+
+  $(document).ready(function () {
+  $(buttonPattern).on('click', (function () {
+
+    $.ajax({
+      method: "GET",
+      url: route('network-equipment.index'),
+      data: { id: buttonPattern.value },
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    })
+      .done(function (data) {
+
+        buttonPattern.remove();
+
+        let button = document.createElement("button");
+        
+        button.className = 'btn btn-outline-danger btn-sm float-left mr-1';
+        button.id = 'pattern';
+        button.innerHTML = 'Удалить шаблон';
+        tdAction.insertBefore(button, tdAction.firstChild);
+
+      });
+  }))
+
+})
 
 </script>
 @endsection

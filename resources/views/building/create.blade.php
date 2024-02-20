@@ -28,7 +28,7 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Название здания *</label>
-                    <input id="MAC" maxlength="17" type="input" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Название здания">
+                    <input type="input" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Название здания">
                     @error('name')
                       <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -80,17 +80,4 @@
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
   </section>
-@endsection
-@section('script')
-<script>
-
-document.getElementById("MAC").addEventListener('keyup', function() { 
-  // remove non digits, break it into chunks of 2 and join with a colon
-  this.value = (this.value.toUpperCase()
-  .replace(/[^\d|A-Z]/g, '')
-  .match(/.{1,2}/g) || [])
-  .join(":")
-    
-});
-</script>
 @endsection

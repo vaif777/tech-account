@@ -23,7 +23,7 @@ class DistributionController extends Controller
         $distributions = Distribution::all();
 
         //dd($distributions->find(8)->location->telecommunication_cabinet_id);
-        
+
         return view('network_infrastructure.distribution.index', [
             'distributions' => $distributions,
         ]);
@@ -42,12 +42,12 @@ class DistributionController extends Controller
         $distributions = Distribution::query()->select('patch_panel_id', 'patch_panel_port', 'final_patch_panel_id', 'final_patch_panel_port')->get();
 
         if ($request->ajax()) {
-            
+
             $res = [];
 
             if ($request->building_id) {
-                
-                $res['floors'] = $floors->where('building_id', $request->building_id); 
+
+                $res['floors'] = $floors->where('building_id', $request->building_id);
             }
 
             if ($request->floor_id) {
@@ -59,7 +59,7 @@ class DistributionController extends Controller
 
                 $excludeArray = array_merge($distributions->where('patch_panel_id', $request->patch_panel_id)->pluck('patch_panel_port')->toArray(), $distributions->where('final_patch_panel_id', $request->patch_panel_id)->pluck('final_patch_panel_port')->toArray());
 
-                $res['ports'] = array_diff( range(1, $patchPanels->find($request->patch_panel_id)->count_port), $excludeArray);
+                $res['ports'] = array_diff(range(1, $patchPanels->find($request->patch_panel_id)->count_port), $excludeArray);
             }
 
             if ($request->filter and ($request->floor_id or $request->building_id or $request->room_id or $request->telecommunication_cabinet_id)) {
@@ -82,7 +82,7 @@ class DistributionController extends Controller
             if ($request->telecommunication_cabinet_id or $request->patch_panel_id) {
 
                 if ($request->telecommunication_cabinet_id && $request->cabinetPatch) {
-                   
+
                     $arguments = [];
                     $arguments['telecommunication_cabinet_id'] = $request->telecommunication_cabinet_id;
 
@@ -90,12 +90,12 @@ class DistributionController extends Controller
                 }
 
                 $request->patch_panel_id ? $res['locations'] = $patchPanels->find($request->patch_panel_id)->location : $res['locations'] = $telecomCabinets->find($request->telecommunication_cabinet_id)->location;
-                $res['locations']->telecommunication_cabinet_id ? $res['telecomCabinet'] = $telecomCabinets->find($res['locations']->telecommunication_cabinet_id) : '' ;
+                $res['locations']->telecommunication_cabinet_id ? $res['telecomCabinet'] = $telecomCabinets->find($res['locations']->telecommunication_cabinet_id) : '';
                 $res['locations']->floor_id ? $res['floors'] = $floors->where('building_id', $res['locations']->building_id) : '';
-                $res['locations']->room_id ?  $res['rooms'] = $rooms->where('floor_id', $res['locations']->floor_id) : '';
-                
+                $res['locations']->room_id ? $res['rooms'] = $rooms->where('floor_id', $res['locations']->floor_id) : '';
+
             }
-             
+
             $res['patchPanelsAll'] = $patchPanels;
             $res['telecomCabinetsAll'] = $telecomCabinets;
             return $res;
@@ -118,16 +118,23 @@ class DistributionController extends Controller
 
         $data = $request->all();
 
-        if (!$data['final_patch_panel_id'] && !$data['patch_panel_id']){
-            
-            $allPatchCordsLocation = Distribution::query()->select('patch_cord_number')->whereIn('id', FinalLocation::searchIdArray([ 'final_building_id' => $data['final_building_id'], 'final_floor_id' => $data['final_floor_id'], 'final_room_id' => $data['final_room_id'], 'final_telecommunication_cabinet_id' => $data['final_telecommunication_cabinet_id']], 'App\Models\Distribution'))->orderBy('patch_cord_number')->pluck('patch_cord_number')->toArray();
+        if (!$data['final_patch_panel_id'] && !$data['patch_panel_id']) {
+
+            $arguments = [];
+
+            $request->floor_id ? $arguments['floor_id'] = $data['floor_id'] : '';
+            $request->building_id ? $arguments['building_id'] = $data['building_id'] : '';
+            $request->room_id ? $arguments['room_id'] = $data['room_id'] : '';
+            $request->telecommunication_cabinet_id ? $arguments['telecommunication_cabinet_id'] = $data['telecommunication_cabinet_id'] : '';
+
+            $allPatchCordsLocation = Distribution::query()->select('patch_cord_number')->whereIn('id', location::searchIdArray( $arguments, 'App\Models\Distribution'))->orderBy('patch_cord_number')->pluck('patch_cord_number')->toArray();
 
             if (!empty($allPatchCordsLocation)) {
 
                 $patchCordNumber = $this->findMissingIncrement($allPatchCordsLocation);
 
-                if ($patchCordNumber){
-                    
+                if ($patchCordNumber) {
+
                     $data['patch_cord_number'] = --$patchCordNumber;
                 } else {
 
@@ -149,23 +156,24 @@ class DistributionController extends Controller
         return redirect()->route('distribution.create')->with('success', "Запись добавленна");
     }
 
-   public function findMissingIncrement($arr) {
+    public function findMissingIncrement($arr)
+    {
         // Используем array_map для создания массива, в котором каждый элемент - разница между текущим и предыдущим элементами
-        $differences = array_map(function($key) use ($arr) {
+        $differences = array_map(function ($key) use ($arr) {
             if ($key > 0) {
                 return $arr[$key] - $arr[$key - 1];
             }
             return null;
         }, array_keys($arr));
-    
+
         // Ищем первое значение в массиве разностей, равное 2
         $key = array_search(2, $differences);
-    
+
         // Если такое значение найдено, возвращаем элемент, следующий за ним в исходном массиве
         if ($key !== false) {
             return $arr[$key];
         }
-    
+
         return false;
     }
 

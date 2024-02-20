@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('final_locations', function (Blueprint $table) {
             $table->id();
-            $table->integer('building_id');
-            $table->integer('floor_id')->nullable();
-            $table->integer('room_id')->nullable();
-            $table->integer('telecommunication_cabinet_id')->nullable();
-            $table->unsignedBigInteger('final_locatable_id');
+            $table->integer('final_building_id');
+            $table->integer('final_floor_id')->nullable();
+            $table->integer('final_room_id')->nullable();
+            $table->integer('final_telecommunication_cabinet_id')->nullable();
+            $table->unsignedBigInteger('locatable_id');
             $table->string('locatable_type');
             $table->timestamps();
         });

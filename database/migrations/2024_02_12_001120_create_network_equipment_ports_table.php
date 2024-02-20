@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patch_panel_ports', function (Blueprint $table) {
+        Schema::create('network_equipment_ports', function (Blueprint $table) {
             $table->id();
-            $table->integer('patch_panel_id')->nullable();
-            $table->integer('number')->nullable();
+            $table->integer('network_equipment_id');
+            $table->integer('number');
+            $table->string('bandwidth')->nullable();
+            $table->string('connection_interfaces')->nullable();
+            $table->string('port_functionality')->nullable();
+            $table->string('network_architecture_port')->nullable();
+            $table->string('power')->nullable();
             $table->timestamps();
         });
     }
