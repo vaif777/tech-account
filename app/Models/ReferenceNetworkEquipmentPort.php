@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class networkEquipmentPort extends Model
+class ReferenceNetworkEquipmentPort extends Model
 {
     use HasFactory;
     protected $fillable = [
         
-        'number',
-        'network_equipment_id',
+        'reference_network_equipment_id',
+        'from',
+        'before',
         'bandwidth',
         'connection_interfaces',
         'port_functionality',

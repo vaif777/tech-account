@@ -344,28 +344,34 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="materials" class="nav-link">
+            <li class="nav-item">
+                <a href="{{ route('reference-network-equipment.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Подразделениея</p>
+                  <p>Сетевое оборудование</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('reference-device.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Устройств</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('subscriber.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Абоненты</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('material-reference.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Справочник материалов</p>
+                  <p>Материалы</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('floor.index', ['building' => 'all']) }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Этажи</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/mailbox/read-mail.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Комноты</p>
+                <a href="{{ route('department.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i> 
+                  <p>Подразделениея</p>
                 </a>
               </li>
             </ul>

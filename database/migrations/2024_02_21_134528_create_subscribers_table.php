@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('network_equipment', function (Blueprint $table) {
+        Schema::create('subscribers', function (Blueprint $table) {
             $table->id();
+            $table->string('department_id');
+            $table->string('surname');
             $table->string('name');
-            $table->integer('manufacturer_id')->nullable();
-            $table->integer('model_id')->nullable();
-            $table->integer('storeroom_accounting_id')->nullable();
-            $table->integer('IP_address')->nullable();
-            $table->integer('MAC_address')->nullable();
-            $table->integer('count_port');
+            $table->string('patronymic');
+            $table->string('phone');
+            $table->string('second_phone');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('network_equipment');
+        Schema::dropIfExists('subscribers');
     }
 };

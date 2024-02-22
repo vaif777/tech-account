@@ -12,21 +12,19 @@ class NetworkEquipment extends Model
     protected $fillable = [
         
         'name',
-        'manufacturer_id',
-        'model_id',
-        'IP_address',
-        'MAC_address',
-        'count_port',
-        'pattern',
-        'unit',
+        'reference_network_equipment_id',
+        'login',
+        'password',
+        'ip_address',
+        'mac_address',
     ];
+
+    public function referenceNetworkEquipment(){
+        return $this->belongsTo(ReferenceNetworkEquipment::class);
+    }
 
     public function location(): MorphOne
     {
         return $this->morphOne(Location::class, 'locatable');
-    }
-
-    public function networkEquipmentPorts(){
-        return $this->hasMany(networkEquipmentPort::class);
     }
 }

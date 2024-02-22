@@ -4,12 +4,16 @@ use App\Http\Controllers\Auth\ActivatedController;
 use App\Http\Controllers\Auth\RegistrationInvitationController;
 use App\Http\Controllers\device_and_material\MaterialController;
 use App\Http\Controllers\device_and_material\NetworkEquipmentController;
+use App\Http\Controllers\reference\DepartmentController;
+use App\Http\Controllers\reference\DeviceController as ReferenceDeviceController;
+use App\Http\Controllers\reference\NetworkEquipmentController as ReferenceNetworkEquipmentController;
 use App\Http\Controllers\device_and_material\PatchPanelController;
 use App\Http\Controllers\facilities\FloorController;
 use App\Http\Controllers\facilities\RoomController;
 use App\Http\Controllers\facilities\BuildingController;
 use App\Http\Controllers\network_infrastructure\DistributionController;
 use App\Http\Controllers\reference\MaterialsReferenceController;
+use App\Http\Controllers\reference\SubscriberController;
 use App\Http\Controllers\settings\SettingController;
 use App\Http\Controllers\device_and_material\TelecommunicationCabinetController;
 use App\Http\Controllers\User\UserController;
@@ -28,7 +32,6 @@ use App\Http\Controllers\HomeController;
 */
 
 Auth::routes(['verify' => true]);
-
 Route::get('/activated', [ActivatedController::class, 'index'])->name('activated')->middleware(['auth', 'verified']);
 
 Route::group(['middleware' => 'registrInvitation'], function(){
@@ -50,9 +53,13 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
         Route::resource('/network-equipment', NetworkEquipmentController::class);
     });
     
-    Route::group(['prefix' => 'reference'], function(){
+    Route::group(['prefix' => 'reference'], function(){ 
         
         Route::resource('/material-reference', MaterialsReferenceController::class);
+        Route::resource('/reference-network-equipment', ReferenceNetworkEquipmentController::class);
+        Route::resource('/department', DepartmentController::class);
+        Route::resource('/subscriber', SubscriberController::class);
+        Route::resource('/reference-device', ReferenceDeviceController::class);
     });
 
     Route::group(['prefix' => 'network-infrastructure'], function(){
@@ -73,7 +80,7 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
         Route::get('/user/mass-create', [UserController::class, 'massCreate'])->name('user.mass_create');
         Route::post('/user/mass-store', [UserController::class, 'massStore'])->name('user.mass-store'); 
     });
+    
     Route::resource('/user', UserController::class);
-
     Route::get('/setting', [SettingController::class, 'index'])->name('setting');  
 });

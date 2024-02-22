@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('network_equipment_ports', function (Blueprint $table) {
+        Schema::create('reference_network_equipment_ports', function (Blueprint $table) {
             $table->id();
-            $table->integer('network_equipment_id');
-            $table->integer('number');
+            $table->integer('reference_network_equipment_id');
+            $table->integer('from');
+            $table->integer('before')->nullable();
             $table->string('bandwidth')->nullable();
             $table->string('connection_interfaces')->nullable();
             $table->string('port_functionality')->nullable();

@@ -4,7 +4,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 id=test class="m-0">Патч панель</h1>
+        <h1 id=test class="m-0">Абоненты</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -23,18 +23,16 @@
           <div class="row">
             <div class="card-body">
               @if (Auth()->user()->permissions->add)
-              <a href="{{ route('network-equipment.create') }}" class="btn btn-success mb-3">+ Добавить</a>
-              <a href="{{ route('network-equipment.create') }}" class="btn btn-success mb-3">+ Добавить со склада</a>
-              @endif
+              <a href="{{ route('subscriber.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+             @endif
               <div class="table-responsive">
-                @if (count($networkEquipments))
+                @if ( count($subscribers) )
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Наименование</th>
-                      <th>Устройство</th>
-                      <th>Телеком шкаф</th>
-                      <th>Расположение</th>
+                      <th>ФИО</th>
+                      <th>Телефон</th>
+                      <th>Подразделение</th>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <th>дествие</th>
@@ -42,21 +40,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($networkEquipments as $networkEquipment)
+                    @foreach($subscribers as $subscriber)
                     <tr>
-                      <td><a href="{{ route('network-equipment.show', ['network_equipment' => $networkEquipment->id]) }}">{{ $networkEquipment->name }}</a></td>
-                          <td>{{ $networkEquipment->referenceNetworkEquipment->manufacturer }} {{ $networkEquipment->referenceNetworkEquipment->model }} ( {{ $networkEquipment->referenceNetworkEquipment->device_type }} )</td>
-                      <td>{{ $networkEquipment->location->telecommunication_cabinet_id ?
-                        $networkEquipment->location->telecommunicationCabinet->name : '' }}</td>
-                      <td>{{ $networkEquipment->location->building->name }} {{ $networkEquipment->location->floor_id ?
-                        'этаж '.$networkEquipment->location->floor->name : '' }} {{
-                        $networkEquipment->location->room_id ? 'комната '.$networkEquipment->location->room->name : ''
-                        }}</td>
+                      <td>{{ $subscriber->surname ?? '' }} {{ $subscriber->name }} {{ $subscriber->patronymic ?? '' }}</td>
+                      <td>{{ $subscriber->phone }} </br> {{ $subscriber->second_phone }}</td>
+                      <td>{{ $subscriber->department->name }}</td>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <td id="action">
                         @if (Auth()->user()->permissions->edit)
-                        <a href="{{ route('network-equipment.edit', ['network_equipment' =>  $networkEquipment->id]) }}"
+                        <a href="{{ route('network-equipment.edit', ['network_equipment' =>  $subscriber->id]) }}"
                           class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
@@ -64,7 +57,7 @@
 
                         @if (Auth()->user()->permissions->delete)
                         <form
-                          action="{{ route('network-equipment.destroy', ['network_equipment' => $networkEquipment->id]) }}"
+                          action="{{ route('network-equipment.destroy', ['network_equipment' => $subscriber->id]) }}"
                           method="post" class="float-left">
                           @csrf
                           @method('DELETE')
@@ -81,12 +74,11 @@
                   </tbody>
                   <tfoot>
                     <tr>
-                      <th>Наименование</th>
-                      <th>Устройство</th>
-                      <th>Телеком шкаф</th>
-                      <th>Расположение</th>
+                    <th>ФИО</th>
+                      <th>Телефон</th>
+                      <th>Подразделение</th>
                       @if (Auth()->user()->permissions->edit or
-                      Auth()->user()->permissions->delete)
+                      Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <th>дествие</th>
                       @endif
                     </tr>
@@ -141,36 +133,6 @@
       "responsive": true,
     });
   });
-
- //let buttonPattern = document.getElementById('pattern');
-  //let tdAction = document.getElementById('action');
-
-  $(document).ready(function () {
-  $(buttonPattern).on('click', (function () {
-
-    $.ajax({
-      method: "GET",
-      url: route('network-equipment.index'),
-      data: { id: buttonPattern.value },
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    })
-      .done(function (data) {
-
-        buttonPattern.remove();
-
-        let button = document.createElement("button");
-        
-        button.className = 'btn btn-outline-danger btn-sm float-left mr-1';
-        button.id = 'pattern';
-        button.innerHTML = 'Удалить шаблон';
-        tdAction.insertBefore(button, tdAction.firstChild);
-
-      });
-  }))
-
-})
 
 </script>
 @endsection

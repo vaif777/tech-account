@@ -7,6 +7,7 @@ use App\Models\Building;
 use App\Models\Floor;
 use App\Models\Location;
 use App\Models\NetworkEquipment;
+use App\Models\ReferenceNetworkEquipment;
 use App\Models\Room;
 use App\Models\TelecommunicationCabinet;
 use Illuminate\Http\Request;
@@ -19,14 +20,6 @@ class NetworkEquipmentController extends Controller
     public function index(Request $request)
     {
         $networkEquipments = NetworkEquipment::All();
-
-        if ($request->ajax()) {
-
-            if ($request->id) {
-                
-                $networkEquipments->find($request->id)->update(['pattern' => 1]); 
-            }
-        }
 
         return view('device_and_material.network_equipment.index', [
             'networkEquipments' => $networkEquipments,
@@ -42,6 +35,7 @@ class NetworkEquipmentController extends Controller
         $floors = Floor::query()->select('id', 'name', 'building_id')->get();
         $rooms = Room::query()->select('id', 'name', 'floor_id')->get();
         $telecomCabinets = TelecommunicationCabinet::query()->select('id', 'name')->get();
+        $referencenetworkEquipments = ReferenceNetworkEquipment::query()->select('id', 'manufacturer', 'model', 'device_type')->get();
 
         if ($request->ajax()) {
             
@@ -89,6 +83,7 @@ class NetworkEquipmentController extends Controller
             'floors' => $floors,
             'rooms' => $rooms,
             'telecomCabinets' => $telecomCabinets,
+            'referencenetworkEquipments' => $referencenetworkEquipments,
         ]);
     }
 
@@ -97,27 +92,11 @@ class NetworkEquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+       
         $data = $request->all();
-        $data['count_port'] = $data['before'];
 
         $networkEquipment = NetworkEquipment::create($data);
         $networkEquipment->location()->create($data);
-
-        if ($data['from'] && !$data['before']) {
-
-            $data['number'] = $data['from'];
-
-            $networkEquipment->networkEquipmentPorts()->create($data);
-        } else {
-
-            for ($i = $data['from']; $i <= $data['before']; ++$i) {
-                
-                $data['number'] = $i;
-
-                $networkEquipment->networkEquipmentPorts()->create($data);
-            }
-        }
      
         return redirect()->route('network-equipment.create')->with('success', 'Запись добавленна');
     }
