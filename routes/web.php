@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Auth\ActivatedController;
 use App\Http\Controllers\Auth\RegistrationInvitationController;
+use App\Http\Controllers\device_and_material\DeviceController;
 use App\Http\Controllers\device_and_material\MaterialController;
 use App\Http\Controllers\device_and_material\NetworkEquipmentController;
+use App\Http\Controllers\network_infrastructure\ConnectionController;
 use App\Http\Controllers\reference\DepartmentController;
 use App\Http\Controllers\reference\DeviceController as ReferenceDeviceController;
 use App\Http\Controllers\reference\NetworkEquipmentController as ReferenceNetworkEquipmentController;
@@ -51,6 +53,7 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
         Route::resource('/telecom-cabinet', TelecommunicationCabinetController::class);
         Route::resource('/patch-panel', PatchPanelController::class);
         Route::resource('/network-equipment', NetworkEquipmentController::class);
+        Route::resource('/device', DeviceController::class);
     });
     
     Route::group(['prefix' => 'reference'], function(){ 
@@ -65,6 +68,7 @@ Route::group(['middleware' => ['auth', 'verified', 'confirmEachNewRegisteredUser
     Route::group(['prefix' => 'network-infrastructure'], function(){
         
         Route::resource('/distribution', DistributionController::class);
+        Route::resource('/connection', ConnectionController::class);
     });
 
     Route::group(['prefix' => 'facilities'], function(){

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\reference;
 
 use App\Http\Controllers\Controller;
+use App\Models\ReferenceDevice;
 use App\Models\Subscriber;
 use Illuminate\Http\Request;
 
@@ -13,10 +14,10 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        //$departments = Department::All();
+        $referenceDevices = ReferenceDevice::All();
 
         return view('reference.device.index', [
-            'departments' =>  [],
+            'referenceDevices' =>  $referenceDevices,
         ]);
     }
 
@@ -25,11 +26,8 @@ class DeviceController extends Controller
      */
     public function create()
     {
-        $subscribers = Subscriber::all();
 
-        return view('reference.device.create', [
-            'subscribers' =>  $subscribers,
-        ]);
+        return view('reference.device.create');
     }
 
     /**
@@ -37,7 +35,9 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        ReferenceDevice::create($request->all());
+
+        return redirect()->route('reference-device.create')->with('success', 'Запись добавленна');
     }
 
     /**

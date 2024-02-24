@@ -165,6 +165,12 @@
                   <p>Расприделение</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('connection.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Подключения</p>
+                </a>
+              </li>
             </ul>
           </li>
           @endif
@@ -290,9 +296,9 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('building.index') }}" class="nav-link">
+                <a href="{{ route('device.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Оборудование</p>
+                  <p>Устройств</p>
                 </a>
               </li>
               <li class="nav-item">

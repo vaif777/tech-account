@@ -4,7 +4,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 id=test class="m-0">Устройства</h1>
+        <h1 id=test class="m-0">Патч панель</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -23,16 +23,17 @@
           <div class="row">
             <div class="card-body">
               @if (Auth()->user()->permissions->add)
-              <a href="{{ route('reference-device.create') }}" class="btn btn-success mb-3">+ Добавить</a>
-             @endif
+              <a href="{{ route('network-equipment.create') }}" class="btn btn-success mb-3">+ Добавить</a>
+              @endif
               <div class="table-responsive">
-                @if ( count($referenceDevices) )
+                @if (count($networkEquipments))
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Тип</th>
-                      <th>Произвадитель</th>
-                      <th>Модель</th>
+                      <th>Наименование</th>
+                      <th>Устройство</th>
+                      <th>Телеком шкаф</th>
+                      <th>Расположение</th>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <th>дествие</th>
@@ -40,16 +41,21 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($referenceDevices as $referenceDevice)
+                    @foreach($networkEquipments as $networkEquipment)
                     <tr>
-                      <td>{{ $referenceDevice->device_type }}</td>
-                      <td>{{ $referenceDevice->manufacturer }}</td>
-                      <td>{{ $referenceDevice->model }}</td>
+                      <td><a href="{{ route('network-equipment.show', ['network_equipment' => $networkEquipment->id]) }}">{{ $networkEquipment->name }}</a></td>
+                          <td>{{ $networkEquipment->referenceNetworkEquipment->manufacturer }} {{ $networkEquipment->referenceNetworkEquipment->model }} ( {{ $networkEquipment->referenceNetworkEquipment->device_type }} )</td>
+                      <td>{{ $networkEquipment->location->telecommunication_cabinet_id ?
+                        $networkEquipment->location->telecommunicationCabinet->name : '' }}</td>
+                      <td>{{ $networkEquipment->location->building->name }} {{ $networkEquipment->location->floor_id ?
+                        'этаж '.$networkEquipment->location->floor->name : '' }} {{
+                        $networkEquipment->location->room_id ? 'комната '.$networkEquipment->location->room->name : ''
+                        }}</td>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <td id="action">
                         @if (Auth()->user()->permissions->edit)
-                        <a href="{{ route('network-equipment.edit', ['network_equipment' => $referenceDevice->id]) }}"
+                        <a href="{{ route('network-equipment.edit', ['network_equipment' =>  $networkEquipment->id]) }}"
                           class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
@@ -57,7 +63,7 @@
 
                         @if (Auth()->user()->permissions->delete)
                         <form
-                          action="{{ route('network-equipment.destroy', ['network_equipment' =>$referenceDevice->id]) }}"
+                          action="{{ route('network-equipment.destroy', ['network_equipment' => $networkEquipment->id]) }}"
                           method="post" class="float-left">
                           @csrf
                           @method('DELETE')
@@ -74,11 +80,12 @@
                   </tbody>
                   <tfoot>
                     <tr>
-                    <th>Тип</th>
-                      <th>Произвадитель</th>
-                      <th>Модель</th>
+                      <th>Наименование</th>
+                      <th>Устройство</th>
+                      <th>Телеком шкаф</th>
+                      <th>Расположение</th>
                       @if (Auth()->user()->permissions->edit or
-                      Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
+                      Auth()->user()->permissions->delete)
                       <th>дествие</th>
                       @endif
                     </tr>

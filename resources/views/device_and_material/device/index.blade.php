@@ -24,13 +24,17 @@
             <div class="card-body">
               @if (Auth()->user()->permissions->add)
               <a href="{{ route('device.create') }}" class="btn btn-success mb-3">+ Добавить</a>
-             @endif
+              @endif
               <div class="table-responsive">
-                @if ( count($departments) )
+                @if ( count($devices) )
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>Название</th>
+                      <th>Устройство</th>
+                      <th>MAC адрес</th>
+                      <th>Пользователь</th>
+                      <th>Расположение</th>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <th>дествие</th>
@@ -38,14 +42,21 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($departments as $department)
+                    @foreach($devices as $device)
                     <tr>
-                      <td>{{ $department->name }}</td>
+                      <td>{{ $device->name }}</td>
+                      <td>{{ $device->referenceDevice->device_type }} {{ $device->referenceDevice->manufacturer ?? '' }} {{ $device->referenceDevice->model ?? '' }}</td>
+                      <td>{{ $device->mac_address }}</td>
+                      <td>{{ $device->subscriber->surname ?? '' }} {{ $device->subscriber->name }} {{ $device->subscriber->patronymic ?? '' }} </br>( {{ $device->subscriber->department->name }} )</td>
+                      <td>{{ $device->location->building->name }} {{ $device->location->floor_id ? 'этаж '.
+                        $device->location->floor->name : '' }} {{ $device->location->room_id ? 'комната '.
+                        $device->location->room->name : '' }} {{ $device->location->telecommunication_cabinet_id ? 'ТКШ '.
+                        $device->location->telecommunicationСabinet->name : '' }}</td>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <td id="action">
                         @if (Auth()->user()->permissions->edit)
-                        <a href="{{ route('network-equipment.edit', ['network_equipment' =>  $department->id]) }}"
+                        <a href="{{ route('network-equipment.edit', ['network_equipment' =>  $device->id]) }}"
                           class="btn btn-info btn-sm float-left mr-1">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
@@ -53,7 +64,7 @@
 
                         @if (Auth()->user()->permissions->delete)
                         <form
-                          action="{{ route('network-equipment.destroy', ['network_equipment' => $department->id]) }}"
+                          action="{{ route('network-equipment.destroy', ['network_equipment' => $device->id]) }}"
                           method="post" class="float-left">
                           @csrf
                           @method('DELETE')
@@ -70,7 +81,11 @@
                   </tbody>
                   <tfoot>
                     <tr>
-                    <th>Название</th>
+                      <th>Название</th>
+                      <th>Устройство</th>
+                      <th>MAC адрес</th>
+                      <th>Пользователь</th>
+                      <th>Расположение</th>
                       @if (Auth()->user()->permissions->edit or
                       Auth()->user()->permissions->delete or Auth()->user()->permissions->add)
                       <th>дествие</th>

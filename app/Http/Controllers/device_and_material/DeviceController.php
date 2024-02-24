@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\device_and_material;
 
 use App\Http\Controllers\Controller;
+use App\Models\Building;
+use App\Models\Device;
+use App\Models\ReferenceDevice;
+use App\Models\Subscriber;
+use App\Models\TelecommunicationCabinet;
 use Illuminate\Http\Request;
 
 class DeviceController extends Controller
@@ -12,7 +17,11 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        //
+        $device = Device::all();
+
+        return view('device_and_material.device.index', [
+            'devices' =>  $device,
+        ]);
     }
 
     /**
@@ -20,7 +29,17 @@ class DeviceController extends Controller
      */
     public function create()
     {
-        //
+        $subscribers = Subscriber::all();
+        $referenceDevice = ReferenceDevice::all();
+        $buildings = Building::all();
+        $telecomCabinets = TelecommunicationCabinet::all();
+        
+        return view('device_and_material.device.create', [
+            'subscribers' =>  $subscribers,
+            'referenceDevices' => $referenceDevice,
+            'buildings' => $buildings,
+            'telecomCabinets' => $telecomCabinets,
+        ]);
     }
 
     /**
@@ -28,7 +47,13 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $data = $request->all();
+
+        $device = Device::create($data);
+        $device->location()->create($data); 
+
+        return redirect()->route('device.create')->with('success', 'Запись добавленна');
     }
 
     /**

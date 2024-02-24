@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('reference_devices', function (Blueprint $table) {
             $table->id();
+            $table->string('device_type');
+            $table->string('manufacturer')->nullable();
+            $table->string('model')->nullable();
             $table->timestamps();
         });
     }

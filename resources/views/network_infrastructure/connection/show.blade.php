@@ -91,8 +91,7 @@
           <h4>
             <i class="fas fa-building"></i> {{ $building->name }}
             @if (Auth()->user()->permissions->edit)
-            <small class="float-right"><a href="{{ route('building.edit', ['building' => $building->id]) }}"
-                class="btn btn-block btn-primary btn-sm">Редактировать
+            <small class="float-right"><a href="{{ route('building.edit', ['building' => $building->id]) }}" class="btn btn-block btn-primary btn-sm">Редактировать
               </a></small>
             @endif
           </h4>
@@ -111,8 +110,7 @@
       </div>
       <!-- /.row -->
 
-      <a href="{{ route('floor.index', ['building' => $building->id]) }}"
-        class="btn btn-block btn-secondary col-3">Перийти в раздел с этажами</a>
+      <a href="{{ route('floor.index', ['building' => $building->id]) }}" class="btn btn-block btn-secondary col-3">Перийти в раздел с этажами</a>
     </div><!-- /.container-fluid -->
     <div class="col-12" id="accordion">
       @foreach($foolrs as $foolr)
