@@ -10,9 +10,8 @@ class PatchPanel extends Model
 {
     use HasFactory;
     protected $fillable = [
+     
         'name',
-        'building_id',
-        'telecommunication_cabinet_id',
         'manufacturer_id',
         'model_id',
         'unit',

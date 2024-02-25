@@ -174,7 +174,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Абонент</label>
-                  <select class="form-control select2" name="subscriber_id" style="width: 100%;">
+                  <select id="subscriberSelect" class="form-control select2" name="subscriber_id" style="width: 100%;">
                     <option value="" selected>Выберите абонента</option>
                     @foreach ($subscribers as $subscriber)
                     <option value="{{ $subscriber->id }}">{{ $subscriber->surname ?? '' }} {{ $subscriber->name }} {{
@@ -275,54 +275,71 @@
           <!-- /.card-header -->
           <div class="card-body">
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-sm-12">
+                <div id="message" class="form-group">
+                  <label id="textDevices">Выбити абонента</label>
+                </div>
+              </div>
+              <div id="subscriberDevicesDiv" class="col-md-12" style="display: none;">
                 <div class="form-group">
-                  <label>Абонент</label>
-                  <select class="form-control select2" name="subscriber_id" style="width: 100%;">
-                    <option value="" selected>Выберите абонента</option>
-                    @foreach ($subscribers as $subscriber)
-                    <option value="{{ $subscriber->id }}">{{ $subscriber->surname ?? '' }} {{ $subscriber->name }} {{
-                      $subscriber->patronymic ?? '' }} ( {{ $subscriber->department->name }} )</option>
-                    @endforeach
+                  <label>Устойсва абонента</label>
+                  <select id="subscriberDevicesSelect" class="form-control select2" name="subscriber_id" style="width: 100%;">
                   </select>
                 </div>
               </div>
-              <div class="col-md-12">
+              <div id="finalEquipmentsDiv" class="col-md-12" style="display: none;">
                 <div class="form-group">
-                  <label>Абонент</label>
-                  <select class="form-control select2" name="subscriber_id" style="width: 100%;">
-                    <option value="" selected>Выберите абонента</option>
-                    @foreach ($subscribers as $subscriber)
-                    <option value="{{ $subscriber->id }}">{{ $subscriber->surname ?? '' }} {{ $subscriber->name }} {{
-                      $subscriber->patronymic ?? '' }} ( {{ $subscriber->department->name }} )</option>
-                    @endforeach
+                  <label>Подключить сетивое оборудование</label>
+                  <select id="finalEquipmentsSelect" class="form-control select2" name="subscriber_id" style="width: 100%;">
                   </select>
                 </div>
               </div>
+            </div>
+            <div id="ReferenceDevicesDiv" style="display: none;">
+            <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label>Абонент</label>
-                  <select class="form-control select2" name="subscriber_id" style="width: 100%;">
-                    <option value="" selected>Выберите абонента</option>
-                    @foreach ($subscribers as $subscriber)
-                    <option value="{{ $subscriber->id }}">{{ $subscriber->surname ?? '' }} {{ $subscriber->name }} {{
-                      $subscriber->patronymic ?? '' }} ( {{ $subscriber->department->name }} )</option>
-                    @endforeach
+                  <label>Устройство</label>
+                  <select id="referenceDeviceSelect" class="form-control select2" name="reference_device_id" style="width: 100%;">
                   </select>
+                </div>
+              </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Придумайте идентификационный маркер*</label>
+                    <div class="input-group">
+                      <input name="name" type="text" class="form-control" placeholder="идентификационный маркер">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>MAC адресс:</label>
+                    <div class="input-group">
+                      <input id="MAC" name="mac_address" maxlength="17" type="text" class="form-control"
+                        placeholder="MAC">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div id="referenceDeviceAddDiv" style="display: none;" class="col-md-12">
+                <div class="form-group">
+                  <button id="referenceDeviceAdd" value="true" type="button" class="btn btn-primary">Добавить устройство
+                    со справочника</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- /.card-body -->
-      </div>
 
-      <!-- /.row -->
-      <!-- Main row -->
-      <div class="row">
-      </div>
-      <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
+        <!-- /.row -->
+        <!-- Main row -->
+        <div class="row">
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
   </section>
 
   <section class="content">
@@ -344,7 +361,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <div id="message" class="form-group">
-                <label id="text">Выбити локацию и абонента</label>
+                  <label id="textDistribution">Выбити локацию</label>
                 </div>
               </div>
               <div id="distributionDiv" class="col-md-12" style="display: none;">
@@ -384,6 +401,8 @@
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- filter_building_floor_room -->
 <script src="{{ asset('app/filters/network_infrastructure/filter_network_infrastructure.js') }}"></script>
+<!-- filter_distribution_and_devices -->
+<script src="{{ asset('app/filters/network_infrastructure/filter_distribution_and_devices.js') }}"></script>
 <!-- InputMask -->
 <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js') }}"></script>
@@ -402,150 +421,18 @@
     $('[data-mask]').inputmask()
   })
 
-  // document.getElementById("MAC").addEventListener('keyup', function () {
-  //   // remove non digits, break it into chunks of 2 and join with a colon
-  //   this.value = (this.value.toUpperCase()
-  //     .replace(/[^\d|A-F]/g, '')
-  //     .match(/.{1,2}/g) || [])
-  //     .join(":")
+  document.getElementById("MAC").addEventListener('keyup', function () {
+    // remove non digits, break it into chunks of 2 and join with a colon
+    this.value = (this.value.toUpperCase()
+      .replace(/[^\d|A-F]/g, '')
+      .match(/.{1,2}/g) || [])
+      .join(":")
 
-  //   if (that.value.length > 17) {
-  //     that.value.length = 0;
-  //   }
-
-  // });
-</script>
-<script>
-
-  let buttonFilter = document.getElementById('buttonFilter');
-  let routeConnection = document.getElementById('routeConnection').value;
-  let distributionDiv = document.getElementById('distributionDiv');
-  let distributionSelect = document.getElementById('distributionSelect');
-  let equipmentDiv = document.getElementById('equipmentDiv');
-  let equipmentSelect = document.getElementById('equipmentSelect');
-  let messageDiv = document.getElementById('message');
-
-  function optionAdd(disabled, optionsDelete, selected, select, title, id = '') {
-
-    select.disabled = disabled;
-    optionsDelete ? select.options.length = 0 : '';
-    let opt = document.createElement('option');
-    selected ? opt.selected = "selected" : '';
-
-    opt.value = id;
-    opt.innerHTML = title;
-    select.appendChild(opt);
-  }
-
-  $(document).ready(function () {
-    $(buttonFilter).on('click', (function () {
-
-      $.ajax({
-        method: "GET",
-        url: routeConnection,
-        data: {
-          building_id: selectBuildings.value,
-          floor_id: selectFloors.value,
-          room_id: selectRooms.value,
-          telecommunication_cabinet_id: selectTelecomCabinets.value,
-        },
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      })
-        .done(function (data) {
-          
-          let distributions = data['distributions'];
-          let equipments = data['equipments']
-          let title = '';
-
-          let text = document.getElementById('text');
-          text ? text.remove() : '' ;
-          console.log(data);
-
-          if (distributions.length != 0) {
-
-            distributionDiv.style.display = 'block';
-
-            optionAdd(false, true, false, distributionSelect, 'Выберите распредиление');
-
-            for (let key in distributions) {
-
-              if ( !distributions[key]['final_patch_panel_id'] && !distributions[key]['patch_panel_id'] ) {
-
-                title += 'Пачкорд № '+distributions[key]['patch_cord_number'];
-                distributions[key]['location']['telecommunication_cabinet_id'] ? title += '  Номер телекомикоционный шкаф: ' + distributions[key]['location']['telecommunication_cabinet']['name'] : '';
-
-              } else {
-
-                title = 'Номер распредиление: '
-                distributions[key]['patch_panel_id'] ? title += distributions[key]['patch_panel']['name'] +'.'+ distributions[key]['patch_panel_port'] : '';
-                distributions[key]['final_patch_panel_id'] ? title += ' <--> ' + distributions[key]['final_patch_panel']['name'] +'.'+ distributions[key]['final_patch_panel_port'] : '';
-                distributions[key]['location']['telecommunication_cabinet_id'] ? title += '  Номер телекомикоционный шкаф: ' + distributions[key]['location']['telecommunication_cabinet']['name'] : '';
-              }
-
-              optionAdd(false, false, false, distributionSelect, title, distributions[key]['id']);
-
-              title = '';
-            }
-          } else {
-
-            distributionDiv.style.display = 'none';
-
-            let h = document.createElement('label');
-          
-            h.id = 'text'
-            h.innerHTML = 'В данной локации нет распределения';
-            messageDiv.appendChild(h);
-          }
-
-
-          if (equipments[0]) {
-
-            equipmentDiv.style.display = 'block';
-
-            let ipAddress = '';
-            let ipAddressEquipmentNumber = '';
-            let informationAboutPorter = '';
-
-            optionAdd(false, true, false, equipmentSelect, 'Выберите распредиление');
-
-            for (let key in equipments) {
-
-              if ( ipAddress == equipments[key]['ip_address'] ) {
-                continue;
-              } else {
-
-                title += 'Номер коммутатора: ' + equipments[key]['name'] + ' ip адрес: ' + equipments[key]['ip_address'];  
-
-                let ports = equipments[key]['reference_network_equipment']['network_equipment_ports']
-
-                for (let port in ports) {
-
-                  for (let i = ports[port]['from']; i <= ports[port]['before']; ++i) {
-
-                    informationAboutPorter += ' Номер порта: ' + i + ' ' + ports[port]['connection_interfaces'] + ' ' + ports[port]['bandwidth'] + ' ' + ports[port]['network_architecture_port'];
-
-                    optionAdd(false, false, false, equipmentSelect, title + informationAboutPorter, equipments[key]['id']);
-
-                    informationAboutPorter = '';
-                  }
-                }
-
-                title = '';
-              }
-
-              ipAddress = equipments[key]['ip_address'];
-            }
-          } else {
-            console.log('ok');
-            equipmentDiv.style.display = 'none';
-          }
-
-        });
-    }))
-
-  })
+    if (that.value.length > 17) {
+      that.value.length = 0;
+    }
+ 
+});
 
 </script>
 @endsection

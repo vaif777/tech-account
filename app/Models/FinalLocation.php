@@ -23,12 +23,12 @@ class FinalLocation extends Model
         return $this->morphTo();
     }
 
-    static public function searchIdArray ($arguments, $type)
+    static public function searchIdArray ($arguments, $type, $isNull = [])
     {
         if ($type == 'App\Models\TelecommunicationCabinet') unset($arguments['telecommunication_cabinet_id']); 
         $arguments['locatable_type'] = $type;
 
-        return self::query()->select()->where($arguments)->pluck('locatable_id')->toArray();
+        return self::query()->select()->where($arguments)->whereNull($isNull)->pluck('locatable_id')->toArray();
     }
 
     public function telecommunicationCabinet (){

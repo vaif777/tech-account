@@ -10,9 +10,7 @@ class TelecommunicationCabinet extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'building_id',
-        'floor_id',
-        'room_id',
+    
         'storeroom_accounting_id',
         'manufacturer_id',
         'model_id',
