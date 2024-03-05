@@ -244,11 +244,11 @@
   </section>
 
   <section class="content">
-    <div class="container-fluid">
+    <div class="card-body">
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <small class="float-center"><button id="buttonFilter" type="button"
+            <small class="float-right"><button id="buttonFilter" type="button"
                 class="btn btn-block btn-secondary">Показать устройства и
                 распределение с сетевым оборудованием</button></small>
           </div>
@@ -283,27 +283,30 @@
               <div id="subscriberDevicesDiv" class="col-md-12" style="display: none;">
                 <div class="form-group">
                   <label>Устойсва абонента</label>
-                  <select id="subscriberDevicesSelect" class="form-control select2" name="subscriber_id" style="width: 100%;">
+                  <select id="subscriberDevicesSelect" class="form-control select2" name="subscriber_id"
+                    style="width: 100%;">
                   </select>
                 </div>
               </div>
               <div id="finalEquipmentsDiv" class="col-md-12" style="display: none;">
                 <div class="form-group">
                   <label>Подключить сетивое оборудование</label>
-                  <select id="finalEquipmentsSelect" class="form-control select2" name="subscriber_id" style="width: 100%;">
+                  <select id="finalEquipmentsSelect" class="form-control select2" name="subscriber_id"
+                    style="width: 100%;">
                   </select>
                 </div>
               </div>
             </div>
             <div id="ReferenceDevicesDiv" style="display: none;">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label>Устройство</label>
-                  <select id="referenceDeviceSelect" class="form-control select2" name="reference_device_id" style="width: 100%;">
-                  </select>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Устройство</label>
+                    <select id="referenceDeviceSelect" class="form-control select2" name="reference_device_id"
+                      style="width: 100%;">
+                    </select>
+                  </div>
                 </div>
-              </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Придумайте идентификационный маркер*</label>
@@ -392,6 +395,21 @@
       <!-- /.row (main row) -->
     </div><!-- /.container-fluid -->
   </section>
+
+  <section class="content">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <small class="float-right"><button id="buttonFilter" type="button"
+                class="btn btn-block btn-success btn-lg">Подключить</button></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
   <input type="hidden" id="route" value="{{ route ('patch-panel.create') }}" />
   <input type="hidden" id="routeConnection" value="{{ route ('connection.create') }}" />
 </form>
@@ -429,8 +447,7 @@
       .join(":")
 
     if (that.value.length > 17) {
-      that.value.length = 0;
-    }
+      that.value.length  }  
  
 });
 
