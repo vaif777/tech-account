@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\network_infrastructure;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DistributionResource;
+use App\Http\Resources\NetworkEquipmentResource;
 use App\Models\Building;
 use App\Models\Device;
 use App\Models\Distribution;

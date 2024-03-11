@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\filter;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DistributionResource;
+use App\Http\Resources\NetworkEquipmentResource;
 use App\Models\Distribution;
+use App\Models\FinalLocation;
 use App\Models\Floor;
 use App\Models\Location;
+use App\Models\NetworkEquipment;
 use App\Models\PatchPanel;
 use App\Models\Room;
 use App\Models\TelecommunicationCabinet;
@@ -85,4 +89,28 @@ class FilterController extends Controller
 
         return $res;
     }
+
+    public function connection(Request $request)
+    {
+
+        return $request->all();
+
+        $res['distributions2'] = DistributionResource::collection($distributions2 = Distribution::with(['patchPanel', 'finalPatchPanel', 'location'])->whereIn('id', FinalLocation::searchIdArray($arguments, 'App\Models\Distribution', $isNull))->get());
+
+        $searchIdArray = $distributions2->map(function ($distribution) {
+            return $distribution->location->only(['building_id', 'floor_id', 'room_id', 'telecommunication_cabinet_id']);
+        })->unique()->values()->all();
+
+        foreach($searchIdArray as $v) {
+
+            $res['equipments2'][] = NetworkEquipmentResource::collection(NetworkEquipment::with('referenceNetworkEquipment')->whereIn('id', location::searchIdArray($v, 'App\Models\NetworkEquipment'))->get());
+        }
+
+
+        $res['telecommunicationCabinet'] = $distributions2->map(function ($distributions2) {
+            return $distributions2->location->telecommunicationCabinet->only(['id', 'name']);;
+        })->unique()->values()->all();
+    }
 }
+
+

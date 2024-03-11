@@ -417,8 +417,22 @@
 @section('script')
 <!-- Select2 -->
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-<!-- filter_building_floor_room -->
-<script src="{{ asset('app/filters/network_infrastructure/filter_network_infrastructure.js') }}"></script>
+<!-- filter_building -->
+<script src="{{ asset('app/filters/network_infrastructure/filter_building.js') }}"></script>
+<!-- filter_floor -->
+<script src="{{ asset('app/filters/network_infrastructure/filter_floor.js') }}"></script>
+<!-- filterTelecomCabinet -->
+<script src="{{ asset('app/filters/network_infrastructure/filterTelecomCabinet.js') }}"></script>
+<!-- filterPatchPanel -->
+<script src="{{ asset('app/filters/network_infrastructure/filterPatchPanel.js') }}"></script> 
+<!-- filterRoom -->
+<script src="{{ asset('app/filters/network_infrastructure/filterRoom.js') }}"></script>
+<!-- filterPatchPanelPort.js -->
+<script src="{{ asset('app/filters/network_infrastructure/filterPatchPanelPort.js') }}"></script>
+<!-- optionAdd -->
+<script src="{{ asset('app/filters/optionAdd.js') }}"></script> 
+<!-- selectUpdate -->
+<script src="{{ asset('app/filters/selectUpdate.js') }}"></script> 
 <!-- filter_distribution_and_devices -->
 <script src="{{ asset('app/filters/network_infrastructure/filter_distribution_and_devices.js') }}"></script>
 <!-- InputMask -->

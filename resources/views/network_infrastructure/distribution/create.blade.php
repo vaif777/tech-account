@@ -182,7 +182,7 @@
 <script src="{{ asset('plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
 <!-- filter_building -->
 <script src="{{ asset('app/filters/network_infrastructure/filter_building.js') }}"></script>
-<!-- filter_building -->
+<!-- filter_floor -->
 <script src="{{ asset('app/filters/network_infrastructure/filter_floor.js') }}"></script>
 <!-- filterTelecomCabinet -->
 <script src="{{ asset('app/filters/network_infrastructure/filterTelecomCabinet.js') }}"></script>
@@ -196,10 +196,7 @@
 <script src="{{ asset('app/filters/optionAdd.js') }}"></script> 
 <!-- selectUpdate -->
 <script src="{{ asset('app/filters/selectUpdate.js') }}"></script> 
-<!-- filter_network_infrastructure
-<script src="{{ asset('app/filters/network_infrastructure/filter_network_infrastructure.js') }}"></script>
-filter_final_network_infrastructure -->
-<!-- <script src="{{ asset('app/filters/network_infrastructure/filter_final_network_infrastructure.js') }}"></script> -->
+
 <script>
 
   //Bootstrap Duallistbox

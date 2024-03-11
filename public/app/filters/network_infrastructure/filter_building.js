@@ -37,9 +37,6 @@ $(document).ready(function () {
 
     fetchData(url, params, function (data) {
       
-      console.log(data);
-      console.log(params);
-      
       selectUpdate(data, params.isFinal);      
     });
   });
