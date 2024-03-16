@@ -23,11 +23,20 @@ $(document).ready(function () {
       const isFinal = $(this).is(selects.selectFinalBuildings);
       selects[isFinal ? 'selectFinalFloors' : 'selectFloors'].empty().append($('<option>', { value: '', text: selects['firstOptionTitleDisabledFloors'], selected: true })).prop('disabled', true);  
       selects[isFinal ? 'selectFinalRooms' : 'selectRooms'].empty().append($('<option>', { value: '', text: selects['firstOptionTitleDisabledRooms'], selected: true })).prop('disabled', true);
+      $.hasOwnProperty.call(selects, 'selectDistributions') ? selects.selectDistributions.empty().append($('<option>', { value: '', text: selects.firstOptionTitleDisabledDistributions, selected: true })).prop('disabled', true) : '';
+      $.hasOwnProperty.call(selects, 'selectDistributionsTelecomCabinets') ? selects.selectDistributionsTelecomCabinets.empty().append($('<option>', { value: '', text: selects.firstOptionTitleDisabledDistributions, selected: true })).prop('disabled', true) : '';
+      $.hasOwnProperty.call(selects, 'selectDistributionsPatchPanels') ? selects.selectDistributionsPatchPanels.empty().append($('<option>', { value: '', text: selects.firstOptionTitleDisabledDistributions, selected: true })).prop('disabled', true) : '';
+      $.hasOwnProperty.call(selects, 'selectDistributionsNetworkEquipments') ? selects.selectDistributionsNetworkEquipments.empty().append($('<option>', { value: '', text: selects.firstOptionTitleDisabledDistributions, selected: true })).prop('disabled', true) : '';
+      $.hasOwnProperty.call(selects, 'selectSubscriberDevices') ? selects.selectSubscriberDevices.empty().append($('<option>', { value: '', text: selects.firstOptionTitleDisabledSubscriberDevices, selected: true })).prop('disabled', true) : '';
+      sections.sectionFilter.hide();
+      sections.sectionReferenceDevice.hide();
+      sections.sectionNetworkEquipment.hide();
+      sections.sectionConnectionNetworkEquipment.hide();
     }
 
     const isFinal = $(this).is(selects.selectFinalBuildings);
     selects[isFinal ? 'selectFinalRooms' : 'selectRooms'].empty().append($('<option>', { value: '', text: selects['firstOptionTitleFloors'], selected: true })).prop('disabled', true);
-    selects[isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts'].empty().append($('<option>', { value: '', text: selects['firstOptionTitlePatchPanelPorts']})).trigger('change');
+    $.hasOwnProperty.call(selects, isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts') ? selects[isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts'].empty().append($('<option>', { value: '', text: selects['firstOptionTitlePatchPanelPorts']})).trigger('change') : '';
     const url = route('filter.location');
     const params = { 
 

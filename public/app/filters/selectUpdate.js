@@ -36,10 +36,11 @@ function selectUpdate (data, isFinal, locations = []) {
         
         id:'select' + selectName == 'selectPatchPanelPorts' || 'select' + selectName == 'selectFinalPatchPanelPorts' ? element : element.id, 
         title: 'select' + selectName == 'selectPatchPanelPorts' || 'select' + selectName == 'selectFinalPatchPanelPorts' ? element : element.name, 
-        selected: $.hasOwnProperty.call(locations, idName) && locations[idName] == element.id ? true : false
+        selected: $.hasOwnProperty.call(locations, idName) && locations[idName] == element.id ? true : false,
+        data: element.data
       });
     }
   }
 
-  $(isFinal ? selects.selectFinalPatchPanelPorts : selects.selectPatchPanelPorts).bootstrapDualListbox('refresh', true);
+  $.hasOwnProperty.call(selects, isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts') ? $(isFinal ? selects.selectFinalPatchPanelPorts : selects.selectPatchPanelPorts).bootstrapDualListbox('refresh', true) : '';
 }

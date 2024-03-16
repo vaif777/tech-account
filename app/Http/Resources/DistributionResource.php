@@ -17,10 +17,12 @@ class DistributionResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'distributionName' =>  $this->patch_cord_number ? "Патч корд № $this->patch_cord_number" : $this->distributionName($this->patch_panel_port, $this->patchPanel->name, $this->final_patch_panel_port ?? '', $this->finalPatchPanel->name ?? ''),
-            'telecommunicationCabinetId' => $this->location->telecommunication_cabinet_id ?? false,
-            'patchPanelId' => $this->patch_panel_id ?? false,
-            'finalPatchPanelId' => $this->final_patch_panel_id ?? false,
+            'name' =>  $this->patch_cord_number ? "Патч корд № $this->patch_cord_number" : $this->distributionName($this->patch_panel_port, $this->patchPanel->name, $this->final_patch_panel_port ?? '', $this->finalPatchPanel->name ?? ''),
+            'data' => [
+
+                'telecomCabinetId' => $this->location->telecommunication_cabinet_id ?? false,
+                'patchPanelId' => $this->patch_panel_id ?? false,
+            ]
         ];
     }
 

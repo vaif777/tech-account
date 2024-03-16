@@ -137,6 +137,7 @@ class ConnectionController extends Controller
             'rooms' => $rooms,
             'telecomCabinets' => $telecomCabinets,
             'subscribers' => $subscribers,
+            'referenceDevices' => $referenceDevices,
         ]);
     }
 
@@ -145,7 +146,7 @@ class ConnectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\filter;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DeviceResource;
 use App\Http\Resources\DistributionResource;
+use App\Http\Resources\NetworkEquipmentPortResource;
 use App\Http\Resources\NetworkEquipmentResource;
+use App\Models\Device;
 use App\Models\Distribution;
 use App\Models\FinalLocation;
 use App\Models\Floor;
@@ -93,23 +96,93 @@ class FilterController extends Controller
     public function connection(Request $request)
     {
 
-        return $request->all();
+        $arguments = [];
+        $isNull = [];
 
-        $res['distributions2'] = DistributionResource::collection($distributions2 = Distribution::with(['patchPanel', 'finalPatchPanel', 'location'])->whereIn('id', FinalLocation::searchIdArray($arguments, 'App\Models\Distribution', $isNull))->get());
+        $request->building_id ? $arguments['building_id'] = $request->building_id : '';
+        $request->floor_id ? $arguments['floor_id'] = $request->floor_id : $isNull[] = 'floor_id';
+        $request->room_id ? $arguments['room_id'] = $request->room_id :$isNull[] = 'room_id';
+        $request->telecommunication_cabinet_id ? $arguments['telecommunication_cabinet_id'] = $request->telecommunication_cabinet_id : $isNull[] = 'telecommunication_cabinet_id';
+        $distributionsTelecomCabinetId = $request->distributionsTelecomCabinetId;
+        $distributionsPatchPanelId = $request->distributionsPatchPanelId;
+        $distributionsNetworkEquipmentId = $request->distributionsNetworkEquipmentId;
+        $subscriberDevicesId = $request->subscriberDevicesId;
 
-        $searchIdArray = $distributions2->map(function ($distribution) {
+        if ($request->buttonClick == 'true') {
+
+            $subscriberDevicesId = null;
+            $distributionsTelecomCabinetId = null;
+            $distributionsPatchPanelId = null;
+            $distributionsNetworkEquipmentId = null;
+        }
+     
+        if (!empty($request->subscriberId) && empty($subscriberDevicesId)) {
+
+            $res['subscriberDevices'] = DeviceResource::collection(Device::with('referenceDevice')->whereIn('id', location::searchIdArray($arguments, 'App\Models\Device', $isNull))->where('subscriber_id', $request->subscriberId)->get());
+        }
+
+        $res['distributions'] = DistributionResource::collection($distributions = Distribution::with(['patchPanel', 'finalPatchPanel', 'location'])->whereIn('id', FinalLocation::searchIdArray($arguments, 'App\Models\Distribution', $isNull))->when($distributionsPatchPanelId !== null, function ($query) use ($distributionsPatchPanelId) {
+            
+            $query->where('patch_panel_id', $distributionsPatchPanelId);
+        })->whereHas('location.telecommunicationCabinet', function ($query) use ($distributionsTelecomCabinetId) {
+            
+            $query->when($distributionsTelecomCabinetId !== null, function ($query) use ($distributionsTelecomCabinetId) {
+                $query->where('id', $distributionsTelecomCabinetId);
+            });
+        })->get());
+
+        $searchIdArray = $distributions->map(function ($distribution) {
             return $distribution->location->only(['building_id', 'floor_id', 'room_id', 'telecommunication_cabinet_id']);
         })->unique()->values()->all();
 
-        foreach($searchIdArray as $v) {
+        if (empty($distributionsNetworkEquipmentId) && !empty($distributionsTelecomCabinetId)) {
 
-            $res['equipments2'][] = NetworkEquipmentResource::collection(NetworkEquipment::with('referenceNetworkEquipment')->whereIn('id', location::searchIdArray($v, 'App\Models\NetworkEquipment'))->get());
+            $res['distributionsNetworkEquipments'] = collect($searchIdArray)->map(function ($locationData) use ($distributionsTelecomCabinetId) {
+                return NetworkEquipment::with('referenceNetworkEquipment')->whereIn('id', Location::searchIdArray($locationData, 'App\Models\NetworkEquipment'))->whereHas('location.telecommunicationCabinet', function ($query) use ($distributionsTelecomCabinetId) {
+                
+                    $query->when($distributionsTelecomCabinetId !== null, function ($query) use ($distributionsTelecomCabinetId) {
+                        $query->where('id', $distributionsTelecomCabinetId);
+                    });
+                })->get();
+            })->collapse()->map(function ($networkEquipment) {
+                return new NetworkEquipmentResource($networkEquipment);
+            });
         }
 
+        $res['distributionsNetworkEquipmentPorts'] = collect($searchIdArray)->map(function ($locationData) use ($distributionsTelecomCabinetId, $distributionsNetworkEquipmentId) {
+            return NetworkEquipment::with(['referenceNetworkEquipment', 'referenceNetworkEquipment.networkEquipmentPorts'])->whereIn('id', location::searchIdArray($locationData, 'App\Models\NetworkEquipment'))->when($distributionsNetworkEquipmentId !== null, function ($query) use ($distributionsNetworkEquipmentId) {
+            
+                $query->where('id', $distributionsNetworkEquipmentId);
+            })->whereHas('location.telecommunicationCabinet', function ($query) use ($distributionsTelecomCabinetId) {
+            
+                $query->when($distributionsTelecomCabinetId !== null, function ($query) use ($distributionsTelecomCabinetId) {
+                    $query->where('id', $distributionsTelecomCabinetId);
+                });
+            })->get();
+        })->collapse()->map(function ($networkEquipment) {
+            return new NetworkEquipmentPortResource($networkEquipment);
+        });
 
-        $res['telecommunicationCabinet'] = $distributions2->map(function ($distributions2) {
-            return $distributions2->location->telecommunicationCabinet->only(['id', 'name']);;
-        })->unique()->values()->all();
+        $res['connectionNetworkEquipmentPorts'] = NetworkEquipmentPortResource::collection(NetworkEquipment::with(['referenceNetworkEquipment', 'referenceNetworkEquipment.networkEquipmentPorts'])->whereIn('id', location::searchIdArray($arguments, 'App\Models\NetworkEquipment', $isNull))->when($distributionsNetworkEquipmentId !== null, function ($query) use ($distributionsNetworkEquipmentId) {
+            
+            $query->where('id', $distributionsNetworkEquipmentId);
+        })->get());
+        
+        if(empty($distributionsTelecomCabinetId)) {
+
+            $res['distributionsTelecomCabinets'] = $distributions->map(function ($distributions) {
+                return $distributions->location->telecommunicationCabinet->only(['id', 'name']);;
+            })->unique()->values()->all();
+        }
+
+        if(empty($distributionsPatchPanelId) && !empty($distributionsTelecomCabinetId)) {
+
+            $res['distributionsPatchPanels'] = $distributions->map(function ($distributions) {
+                return $distributions->patchPanel->only(['id', 'name']);;
+            })->unique()->values()->all();
+        }
+
+        return $res;
     }
 }
 

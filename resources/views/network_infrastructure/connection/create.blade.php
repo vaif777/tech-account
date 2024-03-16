@@ -174,7 +174,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Абонент</label>
-                  <select id="subscriberSelect" class="form-control select2" name="subscriber_id" style="width: 100%;">
+                  <select id="selectSubscriber" class="form-control select2" name="subscriber_id" style="width: 100%;">
                     <option value="" selected>Выберите абонента</option>
                     @foreach ($subscribers as $subscriber)
                     <option value="{{ $subscriber->id }}">{{ $subscriber->surname ?? '' }} {{ $subscriber->name }} {{
@@ -248,8 +248,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <small class="float-right"><button id="buttonFilter" type="button"
-                class="btn btn-block btn-secondary">Показать устройства и
+            <small class="float-right"><button id="buttonFilter" type="button" class="btn btn-block btn-secondary">Показать устройства и
                 распределение с сетевым оборудованием</button></small>
           </div>
         </div>
@@ -257,15 +256,14 @@
     </div>
   </section>
 
-
-  <section class="content">
+  <section class="content" id="sectionReferenceDevice" style="display: none;">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
       <div>
         <!-- SELECT2 EXAMPLE card card-default collapsed-card-->
-        <div class="card card-default">
+        <div class="card card-default collapsed-card">
           <div class="card-header">
-            <h3 class="card-title">Выбор устройство</h3>
+            <h3 class="card-title">добовить устройство со справочника</h3>
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
@@ -274,36 +272,15 @@
           </div>
           <!-- /.card-header -->
           <div class="card-body">
-            <div class="row">
-              <div class="col-sm-12">
-                <div id="message" class="form-group">
-                  <label id="textDevices">Выбити абонента</label>
-                </div>
-              </div>
-              <div id="subscriberDevicesDiv" class="col-md-12" style="display: none;">
-                <div class="form-group">
-                  <label>Устойсва абонента</label>
-                  <select id="subscriberDevicesSelect" class="form-control select2" name="subscriber_id"
-                    style="width: 100%;">
-                  </select>
-                </div>
-              </div>
-              <div id="finalEquipmentsDiv" class="col-md-12" style="display: none;">
-                <div class="form-group">
-                  <label>Подключить сетивое оборудование</label>
-                  <select id="finalEquipmentsSelect" class="form-control select2" name="subscriber_id"
-                    style="width: 100%;">
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div id="ReferenceDevicesDiv" style="display: none;">
-              <div class="row">
+          <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Устройство</label>
-                    <select id="referenceDeviceSelect" class="form-control select2" name="reference_device_id"
-                      style="width: 100%;">
+                    <select class="form-control select2" id="selectReferenceDevice" name="reference_device_id" style="width: 100%;">
+                        <option value="" selected>Выберите устройство</option>     
+                        @foreach ($referenceDevices as $referenceDevice)
+                        <option value="{{ $referenceDevice->id }}"> {{ $referenceDevice->device_type }} ( {{ $referenceDevice->manufacturer ?? '' }} {{ $referenceDevice->model ?? '' }} )</option> 
+                        @endforeach 
                     </select>
                   </div>
                 </div>
@@ -325,12 +302,43 @@
                   </div>
                 </div>
               </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+
+      <!-- /.row -->
+      <!-- Main row -->
+      <div class="row">
+      </div>
+      <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div>
+        <!-- SELECT2 EXAMPLE card card-default collapsed-card-->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title">Выбор устройство</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
             </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
             <div class="row">
-              <div id="referenceDeviceAddDiv" style="display: none;" class="col-md-12">
+              <div id="subscriberDevicesDiv" class="col-md-12">
                 <div class="form-group">
-                  <button id="referenceDeviceAdd" value="true" type="button" class="btn btn-primary">Добавить устройство
-                    со справочника</button>
+                  <label>Устойсва абонента</label>
+                  <select id="selectSubscriberDevices" class="form-control select2" name="subscriber_id"
+                    style="width: 100%;" disabled>
+                  <option value="" selected>Выберите локацию и абонента</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -345,14 +353,14 @@
       </div><!-- /.container-fluid -->
   </section>
 
-  <section class="content">
+  <section class="content" id="sectionConnectionNetworkEquipment" style="display: none;">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
       <div>
         <!-- SELECT2 EXAMPLE card card-default collapsed-card-->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Выбор распределение и порт подключения</h3>
+            <h3 class="card-title">Подключить сетивое оборудование</h3>
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
@@ -362,25 +370,190 @@
           <!-- /.card-header -->
           <div class="card-body">
             <div class="row">
-              <div class="col-sm-12">
-                <div id="message" class="form-group">
-                  <label id="textDistribution">Выбити локацию</label>
+              <div class="col-md-12">
+              <table id="tableConnectionNetworkEquipmentPorts" data-name="tableConnectionNetworkEquipmentPorts" class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>Номер порта</th>
+                    <th>Имя</th>
+                    <th>Выбор</th>
+                    <th>ip адресс</th>
+                    <th>Пропускная способность</th>
+                    <th>Интерфейс подключения</th>
+                    <th>Сетевая архитектура</th>
+                    <th>Питание</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Номер порта</th>
+                    <th>Имя</th>
+                    <th>Выбор</th>
+                    <th>ip адресс</th>
+                    <th>Пропускная способность</th>
+                    <th>Интерфейс подключения</th>
+                    <th>Сетевая архитектура</th>
+                    <th>Питание</th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+
+      <!-- /.row -->
+      <!-- Main row -->
+      <div class="row">
+      </div>
+      <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <section class="content" id="sectionFilter" style="display: none;">
+    <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div>
+        <!-- SELECT2 EXAMPLE card card-default collapsed-card-->
+        <div class="card card-default collapsed-card">
+          <div class="card-header">
+            <h3 class="card-title">Фильтры</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                  <label>Фильтр по шкафу</label>
+                  <select id="selectDistributionsTelecomCabinets" class="form-control select2" name="distribution_id" style="width: 100%;" disabled>
+                  <option value="" selected>Выберите локацию</option>
+                  </select>
                 </div>
               </div>
-              <div id="distributionDiv" class="col-md-12" style="display: none;">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Фильтр по патч панеле</label>
+                  <select id="selectDistributionsPatchPanels" class="form-control select2" name="distribution_id" style="width: 100%;" disabled>
+                  <option value="" selected>Выберите шкаф</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Фильтр по сетевому оборудованию</label>
+                  <select id="selectDistributionsNetworkEquipments" class="form-control select2" name="distribution_id" style="width: 100%;" disabled>
+                  <option value="" selected>Выберите шкаф</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+
+      <!-- /.row -->
+      <!-- Main row -->
+      <div class="row">
+      </div>
+      <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div>
+        <!-- SELECT2 EXAMPLE card card-default collapsed-card-->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title">Выбор распределение</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label>Pаспределение</label>
-                  <select id="distributionSelect" class="form-control select2" name="distribution_id"
-                    style="width: 100%;">
+                  <select id="selectDistributions" class="form-control select2" name="distribution_id" style="width: 100%;" disabled>
+                  <option value="" selected>Выберите локацию</option>
                   </select>
                 </div>
               </div>
-              <div id="equipmentDiv" class="col-md-12" style="display: none;">
-                <div class="form-group">
-                  <label>Ситевое оборудование</label>
-                  <select id="equipmentSelect" class="form-control select2" name="subscriber_id" style="width: 100%;">
-                  </select>
-                </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+
+      <!-- /.row -->
+      <!-- Main row -->
+      <div class="row">
+      </div>
+      <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <section class="content" id="sectionNetworkEquipment" style="display: none;">
+    <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div>
+        <!-- SELECT2 EXAMPLE card card-default collapsed-card-->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title">Выберите порт сетевого оборудования</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+              <table id="tableDistributionsNetworkEquipmentPorts" data-name="tableDistributionsNetworkEquipmentPorts" class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>Номер порта</th>
+                    <th>Имя</th>
+                    <th>Выбор</th>
+                    <th>ip адресс</th>
+                    <th>Пропускная способность</th>
+                    <th>Интерфейс подключения</th>
+                    <th>Сетевая архитектура</th>
+                    <th>Питание</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Номер порта</th>
+                    <th>Имя</th>
+                    <th>Выбор</th>
+                    <th>ip адресс</th>
+                    <th>Пропускная способность</th>
+                    <th>Интерфейс подключения</th>
+                    <th>Сетевая архитектура</th>
+                    <th>Питание</th>
+                  </tr>
+                  </tfoot>
+                </table>
               </div>
             </div>
           </div>
@@ -401,7 +574,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <small class="float-right"><button id="buttonFilter" type="button"
+            <small class="float-right"><button id="buttonFilter" type="submit"
                 class="btn btn-block btn-success btn-lg">Подключить</button></small>
           </div>
         </div>
@@ -409,30 +582,51 @@
     </div>
   </section>
 
-
-  <input type="hidden" id="route" value="{{ route ('patch-panel.create') }}" />
-  <input type="hidden" id="routeConnection" value="{{ route ('connection.create') }}" />
 </form>
 @endsection
 @section('script')
 <!-- Select2 -->
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+<!-- DataTables  & Plugins -->
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script>
+
+  $(function () {
+    $("#example1").DataTable().buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+
+</script>
 <!-- filter_building -->
 <script src="{{ asset('app/filters/network_infrastructure/filter_building.js') }}"></script>
 <!-- filter_floor -->
 <script src="{{ asset('app/filters/network_infrastructure/filter_floor.js') }}"></script>
-<!-- filterTelecomCabinet -->
-<script src="{{ asset('app/filters/network_infrastructure/filterTelecomCabinet.js') }}"></script>
-<!-- filterPatchPanel -->
-<script src="{{ asset('app/filters/network_infrastructure/filterPatchPanel.js') }}"></script> 
 <!-- filterRoom -->
 <script src="{{ asset('app/filters/network_infrastructure/filterRoom.js') }}"></script>
-<!-- filterPatchPanelPort.js -->
-<script src="{{ asset('app/filters/network_infrastructure/filterPatchPanelPort.js') }}"></script>
+<!-- filterTelecomCabinet -->
+<script src="{{ asset('app/filters/network_infrastructure/filterTelecomCabinet.js') }}"></script>
 <!-- optionAdd -->
 <script src="{{ asset('app/filters/optionAdd.js') }}"></script> 
 <!-- selectUpdate -->
 <script src="{{ asset('app/filters/selectUpdate.js') }}"></script> 
+<!-- tableUpdate -->
+<script src="{{ asset('app/filters/tableUpdate.js') }}"></script> 
 <!-- filter_distribution_and_devices -->
 <script src="{{ asset('app/filters/network_infrastructure/filter_distribution_and_devices.js') }}"></script>
 <!-- InputMask -->

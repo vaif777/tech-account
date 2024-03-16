@@ -5,4 +5,11 @@ function optionAdd(select, options) {
   }
   const opt = $('<option>', { value: options.id, text: options.title, selected: options.selected });
   select.append(opt);
+
+  if ($.isEmptyObject(options.data))  return;
+
+    for (const [key, element] of Object.entries(options.data)) {
+
+      opt.data(key, element);
+    }
 }

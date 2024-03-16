@@ -26,6 +26,22 @@ class FinalLocation extends Model
     static public function searchIdArray ($arguments, $type, $isNull = [])
     {
         if ($type == 'App\Models\TelecommunicationCabinet') unset($arguments['telecommunication_cabinet_id']); 
+        
+        $prefix = 'final_';
+
+        $newKeys = array_map(function($key) use ($prefix) {
+           
+            return $prefix . $key;
+        }, array_keys($arguments));
+        
+        $arguments = array_combine($newKeys, $arguments);
+
+        $addWordFunction = function($value) use ($prefix) {
+            return $prefix . $value;
+        };
+
+        $isNull = array_map($addWordFunction, $isNull);
+
         $arguments['locatable_type'] = $type;
 
         return self::query()->select()->where($arguments)->whereNull($isNull)->pluck('locatable_id')->toArray();

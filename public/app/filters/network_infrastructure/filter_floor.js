@@ -24,7 +24,7 @@ $(document).ready(function () {
     }
 
     const isFinal = $(this).is(selects.selectFinalFloors);
-    selects[isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts'].empty().append($('<option>', { value: '', text: selects['firstOptionTitlePatchPanelPorts']})).trigger('change');
+    $.hasOwnProperty.call(selects, isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts') ? selects[isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts'].empty().append($('<option>', { value: '', text: selects['firstOptionTitlePatchPanelPorts']})).trigger('change') : '';
     const url = route('filter.location');
     const params = { 
 
@@ -33,9 +33,6 @@ $(document).ready(function () {
       building_id: isFinal ? $(selects.selectFinalBuildings).val() : $(selects.selectBuildings).val(),
     };
     fetchData(url, params, function (data) {
-      
-    console.log(data);
-    console.log(params);
 
       selectUpdate (data, params.isFinal); 
     });

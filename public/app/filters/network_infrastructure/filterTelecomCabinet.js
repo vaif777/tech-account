@@ -19,7 +19,7 @@ function fetchData(url, params, callback) {
     selects.selectTelecomCabinets.add(selects.selectFinalTelecomCabinets).on('change', function () {
       
         const isFinal = $(this).is(selects.selectFinalTelecomCabinets);
-        selects[isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts'].empty().append($('<option>', { value: '', text: selects['firstOptionTitlePatchPanelPorts']})).trigger('change');
+        $.hasOwnProperty.call(selects, isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts') ? selects[isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts'].empty().append($('<option>', { value: '', text: selects['firstOptionTitlePatchPanelPorts']})).trigger('change') : '';
         const url = route('filter.location');
         const params = { 
   
@@ -28,9 +28,6 @@ function fetchData(url, params, callback) {
       };
   
       fetchData(url, params, function (data) {
-
-        console.log(data);
-        console.log(params);
 
         selectUpdate (data, params.isFinal, data.locations); 
 

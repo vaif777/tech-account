@@ -30,3 +30,4 @@ Route::get('/filter-room', [FilterController::class, 'room'])->name('filter.room
 Route::get('/filter-telecom-cabinets', [FilterController::class, 'telecomCabinet'])->name('filter.telecom.cabinet');
 Route::get('/filter-patch-panel', [FilterController::class, 'patchPanel'])->name('filter.patch.panel');
 Route::get('/filter-location', [FilterController::class, 'location'])->name('filter.location');
+Route::get('/filter-connection', [FilterController::class, 'connection'])->name('filter.connection');

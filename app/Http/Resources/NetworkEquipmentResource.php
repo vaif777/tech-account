@@ -17,6 +17,7 @@ class NetworkEquipmentResource extends JsonResource
         return [
 
             'id' => $this->id,
+            'name' => $this->name.' ('.$this->ip_address.' '. $this->referenceNetworkEquipment->manufacturer.' '.$this->referenceNetworkEquipment->model.' "'. $this->referenceNetworkEquipment->device_type.'")',
         ];
     }
 }
