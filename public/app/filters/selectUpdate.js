@@ -1,4 +1,4 @@
-function selectUpdate (data, isFinal, locations = []) {
+function selectUpdate (data, isFinal, locations = [], portRefresh = 'true') {
 
   for (const [key, elements] of Object.entries(data)) {
 
@@ -42,5 +42,8 @@ function selectUpdate (data, isFinal, locations = []) {
     }
   }
 
-  $.hasOwnProperty.call(selects, isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts') ? $(isFinal ? selects.selectFinalPatchPanelPorts : selects.selectPatchPanelPorts).bootstrapDualListbox('refresh', true) : '';
+  if (portRefresh == 'true') {
+
+    $.hasOwnProperty.call(selects, isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts') ? $(isFinal ? selects.selectFinalPatchPanelPorts : selects.selectPatchPanelPorts).bootstrapDualListbox('refresh', true) : '';
+  }
 }

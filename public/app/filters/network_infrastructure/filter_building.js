@@ -28,25 +28,35 @@ $(document).ready(function () {
       $.hasOwnProperty.call(selects, 'selectDistributionsPatchPanels') ? selects.selectDistributionsPatchPanels.empty().append($('<option>', { value: '', text: selects.firstOptionTitleDisabledDistributions, selected: true })).prop('disabled', true) : '';
       $.hasOwnProperty.call(selects, 'selectDistributionsNetworkEquipments') ? selects.selectDistributionsNetworkEquipments.empty().append($('<option>', { value: '', text: selects.firstOptionTitleDisabledDistributions, selected: true })).prop('disabled', true) : '';
       $.hasOwnProperty.call(selects, 'selectSubscriberDevices') ? selects.selectSubscriberDevices.empty().append($('<option>', { value: '', text: selects.firstOptionTitleDisabledSubscriberDevices, selected: true })).prop('disabled', true) : '';
-      sections.sectionFilter.hide();
-      sections.sectionReferenceDevice.hide();
-      sections.sectionNetworkEquipment.hide();
-      sections.sectionConnectionNetworkEquipment.hide();
+
+      if (typeof sections !== 'undefined') { 
+
+        sections.sectionFilter.hide();
+        sections.sectionReferenceDevice.hide();
+        sections.sectionNetworkEquipment.hide();
+        sections.sectionConnectionNetworkEquipment.hide();
+      }
     }
 
     const isFinal = $(this).is(selects.selectFinalBuildings);
     selects[isFinal ? 'selectFinalRooms' : 'selectRooms'].empty().append($('<option>', { value: '', text: selects['firstOptionTitleFloors'], selected: true })).prop('disabled', true);
-    $.hasOwnProperty.call(selects, isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts') ? selects[isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts'].empty().append($('<option>', { value: '', text: selects['firstOptionTitlePatchPanelPorts']})).trigger('change') : '';
+    
+    if ($(selects.selectBuildings).data('port-refresh') != 'false') {
+
+      $.hasOwnProperty.call(selects, isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts') ? selects[isFinal ? 'selectFinalPatchPanelPorts' : 'selectPatchPanelPorts'].empty().append($('<option>', { value: '', text: selects['firstOptionTitlePatchPanelPorts']})).trigger('change') : '';
+    }
     const url = route('filter.location');
     const params = { 
 
       building_id: this.value,
+      floorAndRoomGroupBy: $(selects.selectBuildings).data('floor-and-room-group-by'),
       isFinal: isFinal
     };
 
     fetchData(url, params, function (data) {
       
-      selectUpdate(data, params.isFinal);      
+      console.log(data);
+      selectUpdate(data, params.isFinal, [], $(selects.selectBuildings).data('port-refresh'));      
     });
   });
 });

@@ -6,13 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DistributionResource;
 use App\Http\Resources\NetworkEquipmentResource;
 use App\Models\Building;
+use App\Models\Connection;
 use App\Models\Device;
 use App\Models\Distribution;
 use App\Models\FinalLocation;
 use App\Models\Floor;
 use App\Models\Location;
 use App\Models\NetworkEquipment;
+use App\Models\PatchPanel;
 use App\Models\ReferenceDevice;
+use App\Models\ReferenceNetworkEquipment;
+use App\Models\ReferenceNetworkEquipmentPort;
 use App\Models\Room;
 use App\Models\Subscriber;
 use App\Models\TelecommunicationCabinet;
@@ -25,7 +29,33 @@ class ConnectionController extends Controller
      */
     public function index()
     {
-        //
+        $connections = Connection::all();
+        $buildings = Building::query()->select('id', 'name')->get();
+        $telecomCabinets = TelecommunicationCabinet::query()->select('id', 'name')->get();
+        $patchPanels = PatchPanel::query()->select('id', 'name',)->get();
+        $networkEquipments = NetworkEquipment::query()->select('id', 'name',)->get();
+        $maxPortPatchPanel = PatchPanel::max('count_port');
+        $maxPortNetworkEquipment = ReferenceNetworkEquipmentPort::max('before');
+        $metworkEquipmentManufactures = ReferenceNetworkEquipment::select('manufacturer')->groupBy('manufacturer')->get();
+        $metworkEquipmentModels = ReferenceNetworkEquipment::select('model')->groupBy('model')->get();
+        $floorsName = Floor::select('name')->groupBy('name')->get();
+        $roomsName = Room::select('name')->groupBy('name')->get();
+        //dd(ReferenceNetworkEquipment::select('model')->groupBy('model')->get());
+
+
+        return view('network_infrastructure.connection.index', [
+            'connections' => $connections,
+            'buildings' => $buildings,
+            'telecomCabinets' => $telecomCabinets,
+            'patchPanels' => $patchPanels,
+            'networkEquipments' => $networkEquipments,
+            'maxPortPatchPanel' => $maxPortPatchPanel,
+            'maxPortNetworkEquipment' => $maxPortNetworkEquipment,
+            'metworkEquipmentManufactures' => $metworkEquipmentManufactures,
+            'metworkEquipmentModels' => $metworkEquipmentModels,
+            'floorsName' => $floorsName,
+            'roomsName' => $roomsName,
+        ]);
     }
 
     /**
@@ -38,98 +68,8 @@ class ConnectionController extends Controller
         $rooms = Room::query()->select('id', 'name', 'floor_id')->get();
         $telecomCabinets = TelecommunicationCabinet::query()->select('id', 'name')->get();
         $subscribers = Subscriber::all();
-        $distributions = Distribution::all();
-        $networkEquipments = NetworkEquipment::all();
         $referenceDevices = ReferenceDevice::all();
-        $devices = Device::all();
 
-        if ($request->ajax()) {
-            
-            $res = [];
-
-            if ($request->floor_id or $request->building_id or $request->room_id or $request->telecommunication_cabinet_id) {
-
-                $arguments = [];
-                $isNull = [];
-
-                $request->floor_id ? $arguments['final_floor_id'] = $request->floor_id : $isNull[] = 'final_floor_id';
-                $request->building_id ? $arguments['final_building_id'] = $request->building_id : '';
-                $request->room_id ? $arguments['final_room_id'] = $request->room_id :$isNull[] = 'final_room_id';
-                $request->telecommunication_cabinet_id ? $arguments['final_telecommunication_cabinet_id'] = $request->telecommunication_cabinet_id : $isNull[] = 'final_telecommunication_cabinet_id';
-
-                $distributions = $distributions->whereIn('id', FinalLocation::searchIdArray($arguments, 'App\Models\Distribution', $isNull));
-
-                $arguments = [];
-                $equipments = [];
-
-                foreach ($distributions as $distribution) {
-
-                    $distribution->patchPanel;
-                    $distribution->finalPatchPanel; 
-                    $distribution->location->telecommunicationCabinet;
-
-                    $distribution->location->floor_id ? $arguments['floor_id'] = $distribution->location->floor_id : '';
-                    $distribution->location->building_id ? $arguments['building_id'] = $distribution->location->building_id : '';
-                    $distribution->location->room_id ? $arguments['room_id'] = $distribution->location->room_id : '';
-                    $distribution->location->telecommunication_cabinet_id ? $arguments['telecommunication_cabinet_id'] = $distribution->location->telecommunication_cabinet_id : '';
-
-                    $searchIdArray = Location::searchIdArray($arguments, 'App\Models\NetworkEquipment');
-
-                    if ($searchIdArray) {
-
-                        $equipments[] = $networkEquipments->whereIn('id', $searchIdArray)->first();
-                    }
-
-                    $arguments = [];
-                }
-                
-                $equipments = (object) $equipments;
-
-                if ($equipments) {
-
-                    foreach ($equipments as $equipment) {
-                        
-                        $equipment->referenceNetworkEquipment->networkEquipmentPorts;
-                    }
-                }
-
-                $res['distributions'] = $distributions;
-                $res['equipments'] = $equipments;
-            } 
-
-            if ($request->referenceDevice) {
-
-                $res['referenceDevices'] = $referenceDevices;    
-            }
-
-            if ($request->subscriber_id) {
-
-                $devices = $devices->where('subscriber_id', $request->subscriber_id); 
-                
-                foreach ($devices as $device) {
-
-                    $device->referenceDevice;
-                }
-
-                $res['devices'] = $devices; 
-            }
-
-            if ($request->telecommunication_cabinet_id) {
-
-                $arguments['telecommunication_cabinet_id'] = $request->telecommunication_cabinet_id;
-                $searchIdArray = Location::searchIdArray($arguments, 'App\Models\NetworkEquipment');
-                $finalEquipments = $networkEquipments->whereIn('id', $searchIdArray); 
-                
-                foreach ($finalEquipments as $finalEquipment) {
-
-                    $finalEquipment->referenceNetworkEquipment->networkEquipmentPorts;;
-                }
-
-                $res['finalEquipments'] = $finalEquipments; 
-            }
-        
-            return $res;
-        }
 
         return view('network_infrastructure.connection.create', [
             'buildings' => $buildings,
@@ -146,7 +86,30 @@ class ConnectionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $data = $request->all();
+
+    $searchs = ["port", 'secondary_port'];
+
+    foreach ( $searchs as $search ) {
+
+        $filteredKeys = collect(array_keys($data))->filter(function ($key) use ($search) {
+            return strpos($key, $search) === 0;
+        })->implode(',');
+
+        isset($data[$filteredKeys]) ? $data[$search] = $data[$filteredKeys] : '';
+        unset($data[$filteredKeys]);
+    }
+
+        if (!isset($data['device_id']) && isset($data['reference_device_id'])) {
+
+            $device = Device::create($data);
+            $data['device_id'] = $device->id;
+            $device->location()->create($data); 
+        }
+
+        Connection::create($data);
+       
+        return redirect()->route('connection.create')->with('success', "Запись добавленна");
     }
 
     /**

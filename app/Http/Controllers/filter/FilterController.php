@@ -26,7 +26,8 @@ class FilterController extends Controller
         $arguments = $request->all();
 
         $isFinal = $arguments['isFinal'] == 'true';
-        unset($arguments['isFinal']);
+        $floorAndRoomGroupBy = isset($arguments['floorAndRoomGroupBy']) ?? false;
+        unset($arguments['isFinal'], $arguments['floorAndRoomGroupBy']);
 
         if (!empty($arguments['telecommunication_cabinet_id']) || !empty($arguments['patch_panel_id'])) {
 
@@ -58,10 +59,20 @@ class FilterController extends Controller
 
         foreach ($arguments as $k => $v){
 
+            if ($floorAndRoomGroupBy && empty($arguments['building_id'])) {
+                    
+                $res[$isFinal ? 'finalFloors' : 'floors'] = Floor::select('name')->groupBy('name')->get();
+            }
+
             if ($k == 'building_id' && !empty($arguments['building_id']) && !isset($arguments['floor_id'])) {
 
                 $res[$isFinal ? 'finalFloors' : 'floors'] = Floor::query()->select('id', 'name', 'building_id')->where($k, $v)->get();
             } 
+
+            if ($floorAndRoomGroupBy && empty($arguments['building_id'])) {
+                    
+                $res[$isFinal ? 'finalRooms' : 'rooms'] = Room::select('name')->groupBy('name')->get();
+            }
 
             if ($k == 'floor_id' && !empty($arguments['floor_id']) && !isset($arguments['room_id'])) {
 

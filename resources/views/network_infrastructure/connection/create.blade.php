@@ -78,8 +78,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Телеком шкаф</label>
-                  <select id="telecomCabinets" class="form-control select2" name="telecommunication_cabinet_id"
-                    style="width: 100%;">
+                  <select id="telecomCabinets" class="form-control select2" style="width: 100%;">
                     <option value="" selected>Выберите шкаф</option>
                     @foreach ($telecomCabinets as $cabinet)
                     <option value="{{ $cabinet->id }}">{{ $cabinet->name }}</option>
@@ -96,7 +95,7 @@
                 <div class="form-group">
                   <div class="form-group clearfix">
                     <div class="icheck-secondary d-inline">
-                      <input type="radio" id="radioPrimary1" name="r1" checked>
+                      <input type="radio" id="radioPrimary1" name="status"  value="Требует подключения" checked>
                       <label for="radioPrimary1">
                         Требует подключения
                       </label>
@@ -108,7 +107,7 @@
                 <div class="form-group">
                   <div class="form-group clearfix">
                     <div class="icheck-secondary d-inline">
-                      <input type="radio" id="radioPrimary2" name="r1">
+                      <input type="radio" id="radioPrimary2" value="Ремонт" name="status">
                       <label for="radioPrimary2">
                         Ремонт
                       </label>
@@ -120,7 +119,7 @@
                 <div class="form-group">
                   <div class="form-group clearfix">
                     <div class="icheck-secondary d-inline">
-                      <input type="radio" id="radioPrimary3" name="r1">
+                      <input type="radio" id="radioPrimary3" value="Не активный" name="status">
                       <label for="radioPrimary3">
                         Не активный
                       </label>
@@ -132,7 +131,7 @@
                 <div class="form-group">
                   <div class="form-group clearfix">
                     <div class="icheck-secondary d-inline">
-                      <input type="radio" id="radioPrimary4" name="r1">
+                      <input type="radio" id="radioPrimary4" value="Подключен" name="status">
                       <label for="radioPrimary4">
                         Подключен
                       </label>
@@ -178,7 +177,7 @@
                     <option value="" selected>Выберите абонента</option>
                     @foreach ($subscribers as $subscriber)
                     <option value="{{ $subscriber->id }}">{{ $subscriber->surname ?? '' }} {{ $subscriber->name }} {{
-                      $subscriber->patronymic ?? '' }} ( {{ $subscriber->department->name }} )</option>
+    $subscriber->patronymic ?? '' }} ( {{ $subscriber->department->name }} )</option>
                     @endforeach
                   </select>
                 </div>
@@ -206,7 +205,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Vlan</label>
-                  <select class="form-control select2" name="subscriber_id" style="width: 100%;">
+                  <select class="form-control select2" name="vlan" style="width: 100%;">
                     <option value="" selected>Выберите Vlan</option>
                   </select>
                 </div>
@@ -224,7 +223,7 @@
                 <div class="form-group">
                   <label>IP адресс устройства:</label>
                   <div class="input-group">
-                    <input type="text" name="ip_address" class="form-control" data-inputmask="'alias': 'ip'" data-mask
+                    <input type="text" name="ip_address_device" class="form-control" data-inputmask="'alias': 'ip'" data-mask
                       placeholder="IP">
                   </div>
                 </div>
@@ -335,7 +334,7 @@
               <div id="subscriberDevicesDiv" class="col-md-12">
                 <div class="form-group">
                   <label>Устойсва абонента</label>
-                  <select id="selectSubscriberDevices" class="form-control select2" name="subscriber_id"
+                  <select id="selectSubscriberDevices" class="form-control select2" name="device_id"
                     style="width: 100%;" disabled>
                   <option value="" selected>Выберите локацию и абонента</option>
                   </select>
@@ -371,34 +370,15 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-12">
-              <table id="tableConnectionNetworkEquipmentPorts" data-name="tableConnectionNetworkEquipmentPorts" class="table table-bordered table-hover">
+              <table id="tableConnectionNetworkEquipmentPorts" class="table table-bordered table-hover">
                   <thead>
-                  <tr>
-                    <th>Номер порта</th>
-                    <th>Имя</th>
-                    <th>Выбор</th>
-                    <th>ip адресс</th>
-                    <th>Пропускная способность</th>
-                    <th>Интерфейс подключения</th>
-                    <th>Сетевая архитектура</th>
-                    <th>Питание</th>
-                  </tr>
                   </thead>
                   <tbody>
                   </tbody>
                   <tfoot>
-                  <tr>
-                    <th>Номер порта</th>
-                    <th>Имя</th>
-                    <th>Выбор</th>
-                    <th>ip адресс</th>
-                    <th>Пропускная способность</th>
-                    <th>Интерфейс подключения</th>
-                    <th>Сетевая архитектура</th>
-                    <th>Питание</th>
-                  </tr>
                   </tfoot>
                 </table>
+                <input type="hidden" id="secondaryNetworkEquipmentId">
               </div>
             </div>
           </div>
@@ -434,7 +414,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                   <label>Фильтр по шкафу</label>
-                  <select id="selectDistributionsTelecomCabinets" class="form-control select2" name="distribution_id" style="width: 100%;" disabled>
+                  <select id="selectDistributionsTelecomCabinets" class="form-control select2" style="width: 100%;" disabled>
                   <option value="" selected>Выберите локацию</option>
                   </select>
                 </div>
@@ -442,7 +422,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Фильтр по патч панеле</label>
-                  <select id="selectDistributionsPatchPanels" class="form-control select2" name="distribution_id" style="width: 100%;" disabled>
+                  <select id="selectDistributionsPatchPanels" class="form-control select2" style="width: 100%;" disabled>
                   <option value="" selected>Выберите шкаф</option>
                   </select>
                 </div>
@@ -450,7 +430,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Фильтр по сетевому оборудованию</label>
-                  <select id="selectDistributionsNetworkEquipments" class="form-control select2" name="distribution_id" style="width: 100%;" disabled>
+                  <select id="selectDistributionsNetworkEquipments" class="form-control select2" style="width: 100%;" disabled>
                   <option value="" selected>Выберите шкаф</option>
                   </select>
                 </div>
@@ -524,38 +504,15 @@
           </div>
           <!-- /.card-header -->
           <div class="card-body">
-            <div class="row">
-              <div class="col-md-12">
-              <table id="tableDistributionsNetworkEquipmentPorts" data-name="tableDistributionsNetworkEquipmentPorts" class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                    <th>Номер порта</th>
-                    <th>Имя</th>
-                    <th>Выбор</th>
-                    <th>ip адресс</th>
-                    <th>Пропускная способность</th>
-                    <th>Интерфейс подключения</th>
-                    <th>Сетевая архитектура</th>
-                    <th>Питание</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Номер порта</th>
-                    <th>Имя</th>
-                    <th>Выбор</th>
-                    <th>ip адресс</th>
-                    <th>Пропускная способность</th>
-                    <th>Интерфейс подключения</th>
-                    <th>Сетевая архитектура</th>
-                    <th>Питание</th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
+            <table id="tableDistributionsNetworkEquipmentPorts" class="table table-bordered table-hover">
+              <thead>
+              </thead>
+              <tbody>
+              </tbody>
+              <tfoot>
+              </tfoot>
+            </table>
+            <input type="hidden" id="networkEquipmentId">
           </div>
         </div>
         <!-- /.card-body -->
@@ -599,18 +556,10 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script>
 
-  $(function () {
-    $("#example1").DataTable().buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
+//   $(function () {
+//     $("#tableDistributionsNetworkEquipmentPorts").DataTable();
+  
+// });
 
 </script>
 <!-- filter_building -->

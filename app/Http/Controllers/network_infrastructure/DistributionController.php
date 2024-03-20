@@ -22,8 +22,6 @@ class DistributionController extends Controller
     {
         $distributions = Distribution::all();
 
-        //dd($distributions->find(8)->location->telecommunication_cabinet_id);
-
         return view('network_infrastructure.distribution.index', [
             'distributions' => $distributions,
         ]);
